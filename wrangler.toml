@@ -5,7 +5,7 @@ compatibility_date = "2024-02-19"
 [[d1_databases]]
 binding = "DB"
 database_name = "cardforge-db"
-database_id = "" # You will fill this in after creating the database
+database_id = "e4ab3f06-79c2-49de-830e-2ec99ea2f53e"
 
 [[r2_buckets]]
 binding = "BUCKET"
