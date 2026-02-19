@@ -4,3 +4,12 @@ compatibility_date = "2024-02-19"
 
 [vars]
 PUBLIC_R2_URL = "https://pub-1c2e7d5133474fdbac45a2cebbed73c6.r2.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cardforge-db"
+database_id = "e4ab3f06-79c2-49de-830e-2ec99ea2f53e"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "cardforge-assets"
