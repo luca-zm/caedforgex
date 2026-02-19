@@ -12,5 +12,4 @@ binding = "BUCKET"
 bucket_name = "cardforge-assets"
 
 [vars]
-API_KEY = "YOUR_GEMINI_KEY_HERE"
 PUBLIC_R2_URL = "http://localhost:8787/r2"
