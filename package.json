@@ -7,11 +7,10 @@
     "dev": "vite",
     "dev:backend": "wrangler pages dev . --d1 DB=cardforge-db --r2 BUCKET=cardforge-assets --binding PUBLIC_R2_URL=http://localhost:8787/r2",
     "build": "npm run build:functions && vite build",
-    "build:functions": "esbuild functions/api/generate.ts --bundle --outfile=functions/api/generate.js --platform=browser --format=esm --target=esnext",
+    "build:functions": "esbuild functions/api/generate.ts --bundle --outfile=functions/api/generate.js --platform=node --format=esm --target=esnext",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.41.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
