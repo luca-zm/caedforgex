@@ -1,0 +1,5 @@
+{
+  "name": "CardForge AI",
+  "description": "A comprehensive card game creation engine. Design cards with AI-generated art (Nano Banana), build decks, and playtest custom rules in a sandbox environment.",
+  "requestFramePermissions": []
+}

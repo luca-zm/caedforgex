@@ -1,0 +1,16 @@
+name = "cardforge-ai"
+pages_build_output_dir = "./dist"
+compatibility_date = "2024-02-19"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cardforge-db"
+database_id = "" # You will fill this in after creating the database
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "cardforge-assets"
+
+[vars]
+API_KEY = "YOUR_GEMINI_KEY_HERE"
+PUBLIC_R2_URL = "http://localhost:8787/r2"
