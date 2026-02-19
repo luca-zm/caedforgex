@@ -12,4 +12,4 @@ binding = "BUCKET"
 bucket_name = "cardforge-assets"
 
 [vars]
-PUBLIC_R2_URL = "http://localhost:8787/r2"
+PUBLIC_R2_URL = "https://pub-1c2e7d5133474fdbac45a2cebbed73c6.r2.dev"
