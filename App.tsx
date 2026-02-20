@@ -9,6 +9,7 @@ import { RulesAssistant } from './components/RulesAssistant';
 import { GameDashboard } from './components/GameDashboard';
 import { GuideView } from './components/GuideView';
 import { CardModal } from './components/CardModal';
+import { StaticRules } from './components/StaticRules';
 import { storageService } from './services/storageService';
 
 // --- STARTER SET DATA (20 Cards) ---
@@ -376,13 +377,16 @@ const App: React.FC = () => {
             case 'play':
                 return activeGame ? <GameTable game={activeGame} cards={cards} decks={decks} /> : null;
             case 'rules':
-                return activeGame ? (
+                if (!activeGame) return null;
+                return activeGame.id === 'GLOBAL_CORE' ? (
+                    <StaticRules game={activeGame} />
+                ) : (
                     <RulesAssistant
                         game={activeGame}
                         onSaveRules={(r) => handleUpdateRules(activeGame.id, r)}
                         onClose={() => setView('dashboard')}
                     />
-                ) : null;
+                );
             case 'guide':
                 return <GuideView game={activeGame || null} />;
             default:
