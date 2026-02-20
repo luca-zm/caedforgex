@@ -51,19 +51,21 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     if (existing) {
       await context.env.DB.prepare(
-        "UPDATE games SET name=?, description=?, artStyle=?, primaryColor=?, rules=?, userId=? WHERE id=?"
+        "UPDATE games SET name=?, description=?, artStyle=?, primaryColor=?, inviteCode=?, iconUrl=?, rules=?, userId=? WHERE id=?"
       ).bind(
         game.name,
         game.description,
         game.artStyle,
         game.primaryColor,
-        JSON.stringify(game.rules),
+        game.inviteCode || null,
+        game.iconUrl || null,
+        game.rules ? JSON.stringify(game.rules) : null,
         game.userId || null,
         game.id
       ).run();
     } else {
       await context.env.DB.prepare(
-        "INSERT INTO games (id, name, description, artStyle, primaryColor, createdAt, inviteCode, rules, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO games (id, name, description, artStyle, primaryColor, createdAt, inviteCode, iconUrl, rules, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
       ).bind(
         game.id,
         game.name,
@@ -72,7 +74,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         game.primaryColor,
         game.createdAt,
         game.inviteCode || null,
-        JSON.stringify(game.rules),
+        game.iconUrl || null,
+        game.rules ? JSON.stringify(game.rules) : null,
         game.userId || null
       ).run();
     }

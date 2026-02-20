@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS games (
     primaryColor TEXT,
     createdAt INTEGER,
     inviteCode TEXT,
+    iconUrl TEXT,
     rules TEXT, -- JSON stored as text
     userId TEXT -- Creator
 );
