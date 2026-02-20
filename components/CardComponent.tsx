@@ -170,9 +170,14 @@ export const CardComponent: React.FC<CardComponentProps> = ({
               </div>
 
               {/* TITLE RIBBON (Placed over the bottom edge of the portrait) */}
-              <div className="absolute w-[110%] left-1/2 -translate-x-1/2 top-[52%] z-20 flex justify-center drop-shadow-2xl">
-                <div className="bg-gradient-to-b from-[#374151] to-[#1f2937] border-y-[2px] border-[#ca8a04] px-4 py-[6px] rounded-[50%] shadow-[0_10px_10px_rgba(0,0,0,0.8)] relative flex items-center justify-center" style={{ minWidth: '80%' }}>
-                  <span className="font-extrabold text-[12px] text-white tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] z-10 font-serif" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
+              <div className="absolute w-[105%] left-1/2 -translate-x-1/2 top-[51%] z-20 flex justify-center drop-shadow-xl">
+                {/* Ribbon backing/tails (dark geometric shapes to ground the plaque) */}
+                <div className="absolute top-1/2 -translate-y-1/2 w-[98%] h-[65%] bg-[#1c1917] rotate-[-2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center left' }}></div>
+                <div className="absolute top-1/2 -translate-y-1/2 w-[98%] h-[65%] bg-[#1c1917] rotate-[2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center right' }}></div>
+
+                {/* Main Plaque */}
+                <div className="bg-gradient-to-b from-[#57534e] via-[#292524] to-[#1c1917] border-[2px] border-b-[3px] border-[#fbbf24] px-4 py-[4px] rounded-[6px] shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_1px_3px_rgba(255,255,255,0.2)] relative z-10 w-[90%] flex items-center justify-center">
+                  <span className="font-extrabold text-[12px] text-white tracking-widest uppercase z-10 font-serif" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
                     {card.name || "Unknown"}
                   </span>
                 </div>
@@ -180,21 +185,23 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
               {/* PARCHMENT LORE BOX */}
               <div
-                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] h-[38%] rounded-[10px] shadow-[inset_0_0_15px_rgba(0,0,0,0.6),0_5px_15px_rgba(0,0,0,0.5)] z-10 flex flex-col pt-[20px] pb-2 px-3 items-center text-center overflow-hidden"
+                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] h-[38%] rounded-[10px] shadow-[inset_0_0_15px_rgba(0,0,0,0.6),0_5px_15px_rgba(0,0,0,0.5)] z-10 flex flex-col pt-[24px] pb-2 px-3 items-center text-center overflow-hidden"
                 style={{
                   backgroundImage: "url('/frames/parchment_bg.png')",
                   backgroundSize: '100% 100%'
                 }}
               >
                 {/* Inner Type Ribbon */}
-                <div className="absolute top-[2px] left-1/2 -translate-x-1/2 border-b-[2px] border-x-[2px] border-black/30 bg-black/10 px-3 py-px rounded-b-md">
-                  <span className="font-serif font-bold text-[9px] uppercase tracking-widest text-black/70">
+                <div className="absolute top-[2px] left-1/2 -translate-x-1/2 border-b-[2px] border-x-[2px] border-black/40 bg-[#e7e5e4] px-3 py-[2px] rounded-b-md shadow-sm">
+                  <span className="font-serif font-bold text-[9px] uppercase tracking-widest text-[#44403c]">
                     <i className={`fas ${theme.icon} mr-1 hidden`}></i>{card.type}
                   </span>
                 </div>
 
-                <div className="w-full h-full overflow-y-auto custom-scrollbar flex items-center justify-center mt-1">
-                  <p className="font-serif font-bold text-[12px] leading-tight text-neutral-900 drop-shadow-sm whitespace-pre-wrap">
+                <div className="w-full h-full overflow-y-auto custom-scrollbar flex items-center justify-center mt-1 z-10 relative">
+                  {/* Semi-transparent backing for legibility */}
+                  <div className="absolute inset-0 bg-[#fef3c7]/60 rounded-md backdrop-blur-[1px]"></div>
+                  <p className="font-serif font-bold text-[12px] leading-tight text-neutral-900 drop-shadow-sm whitespace-pre-wrap relative z-20 px-2 py-1">
                     {card.description || <i>No ability.</i>}
                   </p>
                 </div>
@@ -204,30 +211,30 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
             {/* FLOATING BADGES (Outside the clipping box) */}
 
-            {/* MANA BADGE (Top Left, Blue Gem) */}
-            <div className="absolute -top-[12px] -left-[14px] w-[50px] h-[55px] bg-gradient-to-br from-[#60a5fa] to-[#1e3a8a] border-[4px] border-[#9ca3af] shadow-[0_5px_15px_rgba(0,0,0,0.7),inset_0_0_10px_#2563eb,inset_0_0_0_2px_#1e40af] z-30 flex items-center justify-center drop-shadow-2xl" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}>
+            {/* MANA BADGE (Top Left, Blue Crystal Circle) */}
+            <div className="absolute -top-[12px] -left-[14px] w-[50px] h-[50px] bg-gradient-to-br from-[#60a5fa] via-[#3b82f6] to-[#1e3a8a] rounded-full border-[3px] border-[#9ca3af] shadow-[0_5px_15px_rgba(0,0,0,0.8),inset_0_0_15px_#1d4ed8,inset_0_0_0_2px_#60a5fa] z-30 flex items-center justify-center drop-shadow-2xl">
               <span className="font-black text-[28px] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] font-serif" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>{card.cost}</span>
               {/* Shiny highlight */}
-              <div className="absolute top-[2px] right-[4px] w-[15px] h-[25px] bg-white/30 rounded-full rotate-45 blur-[2px]"></div>
+              <div className="absolute top-[3px] right-[8px] w-[12px] h-[18px] bg-white/40 rounded-full rotate-45 blur-[1px]"></div>
             </div>
 
             {/* ATK & HP (Only for Units) */}
             {card.type === CardType.UNIT && (
               <>
-                {/* ATK BADGE (Bottom Left, Sword/Yellow/Grey Circle) */}
-                <div className="absolute -bottom-[12px] -left-[10px] w-[45px] h-[45px] bg-gradient-to-br from-[#fcd34d] via-[#eab308] to-[#ca8a04] rounded-full border-[4px] border-[#4b5563] shadow-[0_5px_15px_rgba(0,0,0,0.7),inset_0_0_8px_#854d0e] z-30 flex items-center justify-center">
-                  <div className="absolute -bottom-[8px] -left-[8px] opacity-20"><i className="fas fa-gavel text-3xl"></i></div> {/* Fake weapon icon shadow */}
-                  <span className="font-black text-[24px] text-white font-serif z-10" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>{card.attack}</span>
-                  {/* Shading */}
-                  <div className="absolute inset-2 rounded-full border-t border-white/50 pointer-events-none"></div>
+                {/* ATK BADGE (Bottom Left, Silver/Yellow Sword Circle) */}
+                <div className="absolute -bottom-[12px] -left-[12px] w-[46px] h-[46px] bg-gradient-to-br from-[#fde047] via-[#facc15] to-[#a16207] rounded-full border-[3px] border-[#4b5563] shadow-[0_5px_15px_rgba(0,0,0,0.8),inset_0_0_10px_#fef08a] z-30 flex items-center justify-center">
+                  <div className="absolute -bottom-[2px] -left-[2px] opacity-[0.35]"><i className="fas fa-gavel text-3xl text-black"></i></div> {/* Clearer sword shadow */}
+                  <span className="font-black text-[25px] text-white font-serif z-10" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>{card.attack}</span>
+                  {/* Glossy top rim */}
+                  <div className="absolute inset-[1px] rounded-full border-t-[3px] border-white/60 pointer-events-none"></div>
                 </div>
 
-                {/* HP BADGE (Bottom Right, Red Blood Drop / Shield) */}
-                <div className="absolute -bottom-[12px] -right-[10px] w-[45px] h-[45px] bg-gradient-to-br from-[#ef4444] to-[#991b1b] rounded-full border-[4px] border-[#4b5563] shadow-[0_5px_15px_rgba(0,0,0,0.7),inset_0_0_8px_#7f1d1d] z-30 flex items-center justify-center" style={{ borderBottomRightRadius: '5px' }}> {/* Slight teardrop shape by flattening bottom right */}
-                  <div className="absolute -bottom-[5px] -right-[5px] opacity-20"><i className="fas fa-tint text-3xl"></i></div> {/* Fake blood drop shadow */}
-                  <span className="font-black text-[24px] text-white font-serif z-10" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>{card.health}</span>
-                  {/* Shading */}
-                  <div className="absolute inset-2 rounded-full border-t border-white/40 pointer-events-none"></div>
+                {/* HP BADGE (Bottom Right, Bright Red Blood Drop Circle) */}
+                <div className="absolute -bottom-[12px] -right-[12px] w-[46px] h-[46px] bg-gradient-to-br from-[#f87171] via-[#dc2626] to-[#7f1d1d] rounded-full border-[3px] border-[#4b5563] shadow-[0_5px_15px_rgba(0,0,0,0.8),inset_0_0_10px_#fca5a5] z-30 flex items-center justify-center" style={{ borderBottomRightRadius: '4px' }}> {/* Slight teardrop shape */}
+                  <div className="absolute -bottom-[2px] -right-[2px] opacity-[0.35]"><i className="fas fa-tint text-3xl text-black"></i></div> {/* Clearer drop shadow */}
+                  <span className="font-black text-[25px] text-white font-serif z-10" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>{card.health}</span>
+                  {/* Glossy top rim */}
+                  <div className="absolute inset-[1px] rounded-full border-t-[3px] border-white/50 pointer-events-none"></div>
                 </div>
               </>
             )}
