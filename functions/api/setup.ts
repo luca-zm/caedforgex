@@ -32,6 +32,14 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // Define the schema SQL commands directly here
     const statements = [
       context.env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS users (
+            id TEXT PRIMARY KEY,
+            email TEXT UNIQUE NOT NULL,
+            displayName TEXT,
+            createdAt INTEGER
+        );
+      `),
+      context.env.DB.prepare(`
         CREATE TABLE IF NOT EXISTS games (
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
@@ -40,7 +48,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             primaryColor TEXT,
             createdAt INTEGER,
             inviteCode TEXT,
-            rules TEXT
+            iconUrl TEXT,
+            rules TEXT,
+            userId TEXT
         );
       `),
       context.env.DB.prepare(`
@@ -54,7 +64,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             health INTEGER,
             description TEXT,
             imageUrl TEXT,
-            createdAt INTEGER
+            createdAt INTEGER,
+            userId TEXT
         );
       `),
       context.env.DB.prepare(`
@@ -62,17 +73,33 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             id TEXT PRIMARY KEY,
             gameId TEXT NOT NULL,
             name TEXT NOT NULL,
-            cardIds TEXT
+            cardIds TEXT,
+            userId TEXT
+        );
+      `),
+      context.env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS skills (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT NOT NULL,
+            allowedTypes TEXT NOT NULL,
+            maxHealth INTEGER,
+            maxAttack INTEGER,
+            minCost INTEGER,
+            tier TEXT DEFAULT 'COMMON'
         );
       `),
       context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_cards_game ON cards(gameId);`),
-      context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_decks_game ON decks(gameId);`)
+      context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_decks_game ON decks(gameId);`),
+      context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_games_user ON games(userId);`),
+      context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_cards_user ON cards(userId);`),
+      context.env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_decks_user ON decks(userId);`)
     ];
 
     await context.env.DB.batch(statements);
-    
-    return new Response(JSON.stringify({ success: true, message: "Database tables created successfully." }), { 
-        headers: { 'Content-Type': 'application/json' } 
+
+    return new Response(JSON.stringify({ success: true, message: "Database tables created successfully." }), {
+      headers: { 'Content-Type': 'application/json' }
     });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e.message }), { status: 500 });
