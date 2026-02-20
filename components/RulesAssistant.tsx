@@ -712,7 +712,6 @@ Your primary goal is to **${winCondDesc}**
                         <div className="glass-panel p-6 rounded-3xl border border-white/10">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-sm font-bold text-fuchsia-400 uppercase tracking-widest">Gameplay Archetype</h3>
-                                <div className="text-[9px] bg-white/5 px-2 py-1 rounded text-slate-400 border border-white/5">Auto-Calibrates Rules</div>
                             </div>
 
                             <div className="grid gap-3">
@@ -750,15 +749,6 @@ Your primary goal is to **${winCondDesc}**
                         <div>
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-sm font-bold text-fuchsia-400 uppercase tracking-widest">Generated Codex</h3>
-                                <button
-                                    onClick={handleGenerateCodex}
-                                    disabled={loading || !selectedArchetypeId}
-                                    className={`text-[10px] font-bold flex items-center gap-1 px-3 py-1 rounded-full border transition-colors
-                                    ${loading || !selectedArchetypeId ? 'bg-white/5 text-slate-500 border-white/5' : 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/50 hover:bg-fuchsia-500/40 hover:text-white'}
-                                `}
-                                >
-                                    <i className={`fas fa-sync ${loading ? 'fa-spin' : ''}`}></i> {rules.fullText ? 'Regenerate Codex' : 'Generate Codex'}
-                                </button>
                             </div>
 
                             {/* CODEX DISPLAY */}
