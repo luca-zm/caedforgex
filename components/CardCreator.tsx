@@ -390,23 +390,6 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
                                         <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-yellow-500/30 rounded-bl-lg m-2"></div>
                                     </div>
                                 </div>
-
-                                <button
-                                    onClick={handleGenerateFluff}
-                                    disabled={loadingText}
-                                    className="w-full relative overflow-hidden border border-yellow-500/50 rounded-xl py-4 group hover:bg-yellow-500/10 transition-colors active:scale-[0.98]"
-                                >
-                                    <div className="relative flex items-center justify-center gap-2">
-                                        {loadingText ? (
-                                            <i className="fas fa-feather fa-spin text-yellow-400"></i>
-                                        ) : (
-                                            <>
-                                                <i className="fas fa-scroll text-yellow-400"></i>
-                                                <span className="font-bold text-yellow-400 uppercase tracking-widest text-xs">Auto-Write Legend</span>
-                                            </>
-                                        )}
-                                    </div>
-                                </button>
                             </div>
                         )}
 
