@@ -531,17 +531,15 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                 <div className="relative z-30 flex-1 flex flex-col items-center justify-between pb-8 w-full max-w-md mx-auto">
 
                     {/* ARENA CAROUSEL */}
-                    <div className="w-full px-4 mt-8">
-                        <div className="relative bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-slate-700 rounded-2xl p-6 shadow-[0_15px_30px_rgba(0,0,0,0.8),inset_0_2px_5px_rgba(255,255,255,0.1)] flex flex-col items-center justify-center overflow-hidden">
-                            {/* Inner glow/texture */}
-                            <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+                    <div className="w-full px-4 mt-12 mb-8">
+                        <div className="relative flex flex-col items-center justify-center">
 
                             <div className="flex items-center justify-between w-full">
                                 <button
                                     onClick={() => setSelectedArenaIdx(prev => prev > 0 ? prev - 1 : arenas.length - 1)}
-                                    className="w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 hover:scale-110 transition-all active:scale-95"
+                                    className="w-12 h-12 rounded-full bg-gradient-to-b from-yellow-300 to-amber-500 border-2 border-yellow-100 shadow-[0_8px_20px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.6)] flex items-center justify-center text-black hover:scale-110 hover:brightness-110 transition-all active:scale-95"
                                 >
-                                    <i className="fas fa-chevron-left"></i>
+                                    <i className="fas fa-chevron-left text-xl drop-shadow-md"></i>
                                 </button>
 
                                 <div className="flex flex-col items-center animate-fade-in text-center px-4">
@@ -557,9 +555,9 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
 
                                 <button
                                     onClick={() => setSelectedArenaIdx(prev => prev < arenas.length - 1 ? prev + 1 : 0)}
-                                    className="w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-white/10 hover:scale-110 transition-all active:scale-95"
+                                    className="w-12 h-12 rounded-full bg-gradient-to-b from-yellow-300 to-amber-500 border-2 border-yellow-100 shadow-[0_8px_20px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.6)] flex items-center justify-center text-black hover:scale-110 hover:brightness-110 transition-all active:scale-95"
                                 >
-                                    <i className="fas fa-chevron-right"></i>
+                                    <i className="fas fa-chevron-right text-xl drop-shadow-md"></i>
                                 </button>
                             </div>
                         </div>
