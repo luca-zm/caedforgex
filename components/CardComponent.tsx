@@ -204,7 +204,12 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                   {/* Semi-transparent backing for legibility */}
                   <div className="absolute inset-0 bg-[#fef3c7]/60 rounded-md backdrop-blur-[1px]"></div>
                   <p className="font-serif font-bold text-[12px] leading-tight text-neutral-900 drop-shadow-sm whitespace-pre-wrap relative z-20 px-2 py-1">
-                    {card.description || <i>No ability.</i>}
+                    {(() => {
+                      if (!card.description) return <i>No ability.</i>;
+                      const parts = card.description.split('**');
+                      if (parts.length === 1) return card.description;
+                      return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-black text-black">{part}</strong> : part);
+                    })()}
                   </p>
                 </div>
               </div>

@@ -178,11 +178,47 @@ export const RulesAssistant: React.FC<RulesAssistantProps> = ({ game, onSaveRule
         if (!confirm(`Switch to "${arch.name}" Protocol?\n\nThis will REWRITE your current rules (HP, Mana, Limits) to ensure a balanced ${arch.name} experience.`)) return;
 
         setSelectedArchetypeId(archetypeId);
-        setRules(prev => ({ ...prev, ...arch.rules }));
+        const nextRules = { ...rules, ...arch.rules };
         setCodexSlots(arch.codexPrompt);
 
         // Clear current promos so user knows to regenerate
         setPromoCards([]);
+
+        // Auto-Regenerate Codex immediately to keep the view in sync
+        const newCodex = generateCodexText(arch, nextRules);
+        setRules({ ...nextRules, fullText: newCodex });
+    };
+
+    const generateCodexText = (arch: any, currentRules: GameRules) => {
+        const resourceDesc = currentRules.resourceType === 'MANA_RAMP' ? "Mana (Increases by 1 each turn)" : "Fixed Energy (Refreshes each turn)";
+        const winCondDesc = currentRules.winCondition === 'REDUCE_HEALTH' ? `Reduce opponent from ${currentRules.initialHealth} HP to 0.` : "Complete objective criteria.";
+
+        return `
+# 📜 Codex: ${game.name}
+
+## The Core Objective
+Your primary goal is to **${winCondDesc}**
+
+## Game Architecture: ${arch.name}
+*${arch.description}*
+
+### Vital Statistics
+- **Starting Health:** ${currentRules.initialHealth}
+- **Economy Engine:** ${resourceDesc} (Max: ${currentRules.maxResource})
+- **Starting Hand:** ${currentRules.startingHandSize} cards
+- **Draw Rate:** ${currentRules.cardsPerTurn} card(s) per turn
+
+### Deck Building Laws
+- **Deck Size:** ${currentRules.constraints.minCards} to ${currentRules.constraints.maxCards} cards
+- **Card Limit:** Maximum ${currentRules.constraints.maxCopiesPerCard} copies of the same card
+- **Permitted Elements:** ${currentRules.constraints.allowedTypes.join(', ')}
+
+### Combat Flow
+1. **Draw Phase:** Draw ${currentRules.cardsPerTurn} card(s).
+2. **Main Phase:** Play cards paying their exact Cost.
+3. **Combat Phase:** Units strike the enemy or defending units.
+4. **End Phase:** Damage is resolved and the turn is passed.
+`;
     };
 
     const handleGenerateSectionThemes = async () => {
@@ -233,38 +269,9 @@ export const RulesAssistant: React.FC<RulesAssistantProps> = ({ game, onSaveRule
 
         try {
             const arch = GAME_ARCHETYPES.find(a => a.id === selectedArchetypeId) || GAME_ARCHETYPES[2];
-            const resourceDesc = rules.resourceType === 'MANA_RAMP' ? "Mana (Increases by 1 each turn)" : "Fixed Energy (Refreshes each turn)";
-            const winCondDesc = rules.winCondition === 'REDUCE_HEALTH' ? `Reduce opponent from ${rules.initialHealth} HP to 0.` : "Complete objective criteria.";
+            const newCodex = generateCodexText(arch, rules);
 
-            const deterministicCodex = `
-# 📜 Codex: ${game.name}
-
-## The Core Objective
-Your primary goal is to **${winCondDesc}**
-
-## Game Architecture: ${arch.name}
-*${arch.description}*
-
-### Vital Statistics
-- **Starting Health:** ${rules.initialHealth}
-- **Economy Engine:** ${resourceDesc} (Max: ${rules.maxResource})
-- **Starting Hand:** ${rules.startingHandSize} cards
-- **Draw Rate:** ${rules.cardsPerTurn} card(s) per turn
-
-### Deck Building Laws
-- **Deck Size:** ${rules.constraints.minCards} to ${rules.constraints.maxCards} cards
-- **Card Limit:** Maximum ${rules.constraints.maxCopiesPerCard} copies of the same card
-- **Permitted Elements:** ${rules.constraints.allowedTypes.join(', ')}
-
-### Combat Flow
-1. **Draw Phase:** Draw ${rules.cardsPerTurn} card(s).
-2. **Main Phase:** Play cards paying their exact Cost.
-3. **Combat Phase:** Units strike the enemy or defending units.
-4. **End Phase:** Damage is resolved and the turn is passed.
-`;
-
-            const newRules = { ...rules, fullText: deterministicCodex };
-            setRules(newRules);
+            setRules(prev => ({ ...prev, fullText: newCodex }));
 
             // Clear promos since we no longer use them for the Codex
             setPromoCards([]);
@@ -778,6 +785,14 @@ Your primary goal is to **${winCondDesc}**
 
                                         {/* Render Markdown-like content natively since we control the structure */}
                                         {rules.fullText.split('\n').map((line, idx) => {
+
+                                            // Helper to transform **text** to bold
+                                            const renderBoldParts = (text: string) => {
+                                                if (!text.includes('**')) return text;
+                                                const parts = text.split('**');
+                                                return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-bold text-white tracking-wide">{part}</strong> : part);
+                                            };
+
                                             if (line.startsWith('# ')) {
                                                 return <h2 key={idx} className="text-2xl font-black text-white italic uppercase mb-6 tracking-wider border-b border-white/10 pb-2">{line.replace('# ', '')}</h2>;
                                             }
@@ -810,12 +825,12 @@ Your primary goal is to **${winCondDesc}**
                                                 )
                                             }
                                             if (line.startsWith('*')) {
-                                                return <p key={idx} className="text-[11px] text-slate-400 italic mb-4 border-l-2 border-fuchsia-500/50 pl-3 leading-relaxed">{line.replaceAll('*', '')}</p>;
+                                                return <p key={idx} className="text-[11px] text-slate-400 italic mb-4 border-l-2 border-fuchsia-500/50 pl-3 leading-relaxed">{renderBoldParts(line.replaceAll('*', ''))}</p>;
                                             }
                                             if (line.trim() === '') {
                                                 return <div key={idx} className="h-2"></div>;
                                             }
-                                            return <p key={idx} className="text-xs text-slate-300 mb-2 leading-relaxed">{line}</p>;
+                                            return <p key={idx} className="text-xs text-slate-300 mb-2 leading-relaxed">{renderBoldParts(line)}</p>;
                                         })}
                                     </div>
                                 )}
