@@ -253,6 +253,17 @@ Your primary goal is to **${winCondDesc}**
             );
             const newTheme = { ...boardTheme, backgroundUrl: url };
             setBoardTheme(newTheme);
+
+            // AUTO-SAVE TO PERSIST TO CLOUDFLARE R2 IMMEDIATELY
+            onSaveRules({
+                ...rules,
+                sectionBgs,
+                _extra: {
+                    boardTheme: newTheme,
+                    promoCards,
+                    inviteCode
+                }
+            });
         } catch (e) {
             alert("Failed to generate board art");
         } finally {
