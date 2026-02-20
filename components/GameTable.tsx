@@ -508,15 +508,16 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
         return (
             <div className="flex flex-col h-full bg-[#050407] relative overflow-hidden font-sans">
                 {/* DYNAMIC BACKGROUND */}
-                <div className="absolute inset-0 z-0 transition-all duration-700 ease-in-out">
-                    <div className="absolute inset-0 bg-black/60 z-10"></div> {/* Dark Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/80 z-20"></div> {/* Vertical Vignette */}
-                    <img
-                        src={currentArena.bg}
-                        className="w-full h-full object-cover opacity-80 scale-105 transform origin-center"
-                        style={{ filter: 'blur(3px) brightness(0.8)' }}
-                        alt="Arena Background"
-                    />
+                <div className="absolute inset-0 z-0 bg-[#0a0a0c]">
+                    <div
+                        className="absolute inset-0 opacity-40 z-10"
+                        style={{
+                            backgroundImage: "url('/arenas/play_pattern_bg.png')",
+                            backgroundSize: '200px 200px',
+                            backgroundRepeat: 'repeat'
+                        }}
+                    ></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90 z-20"></div> {/* Vignette */}
                 </div>
 
                 {/* TOP BAR / TITLE */}
@@ -544,9 +545,11 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                                 </button>
 
                                 <div className="flex flex-col items-center animate-fade-in text-center px-4">
-                                    <div className="w-32 h-20 mb-3 rounded-xl border-2 border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.6)] overflow-hidden relative">
-                                        <img src={currentArena.cardBg} className="w-full h-full object-cover relative z-10" alt={currentArena.name} />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-20"></div>
+                                    <div className="w-28 h-40 mb-3 rounded-2xl border-4 border-[#334155] shadow-[0_15px_30px_rgba(0,0,0,0.9),inset_0_4px_6px_rgba(255,255,255,0.2),inset_0_-8px_10px_rgba(0,0,0,0.6)] overflow-hidden relative bg-slate-800 transform transition-transform duration-500 hover:scale-[1.02]">
+                                        <img src={currentArena.cardBg} className="w-full h-full object-cover scale-[1.15] relative z-10" alt={currentArena.name} />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 z-20 pointer-events-none"></div>
+                                        {/* Glossy overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-50 z-30 pointer-events-none"></div>
                                     </div>
                                     <h2 className="text-2xl font-black text-white tracking-widest uppercase drop-shadow-md">{currentArena.name}</h2>
                                     <span className="text-[10px] font-bold text-indigo-300 uppercase mt-1 tracking-widest">{currentArena.desc}</span>
