@@ -543,14 +543,14 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                                 </button>
 
                                 <div className="flex flex-col items-center animate-fade-in text-center px-4">
-                                    <div className="w-28 h-40 mb-3 rounded-2xl border-4 border-[#334155] shadow-[0_15px_30px_rgba(0,0,0,0.9),inset_0_4px_6px_rgba(255,255,255,0.2),inset_0_-8px_10px_rgba(0,0,0,0.6)] overflow-hidden relative bg-slate-800 transform transition-transform duration-500 hover:scale-[1.02]">
-                                        <img src={currentArena.cardBg} className="w-full h-full object-cover scale-[1.15] relative z-10" alt={currentArena.name} />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 z-20 pointer-events-none"></div>
+                                    <div className="w-48 h-64 mb-4 rounded-3xl border-[6px] border-[#334155] shadow-[0_20px_40px_rgba(0,0,0,0.95),inset_0_4px_8px_rgba(255,255,255,0.2),inset_0_-10px_15px_rgba(0,0,0,0.7)] overflow-hidden relative bg-slate-800 transform transition-all duration-500 hover:scale-[1.03] hover:border-blue-400 group">
+                                        <img src={currentArena.cardBg} className="w-full h-full object-cover scale-[1.15] relative z-10 transition-transform duration-700 group-hover:scale-[1.12]" alt={currentArena.name} />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10 z-20 pointer-events-none"></div>
                                         {/* Glossy overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-50 z-30 pointer-events-none"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-60 z-30 pointer-events-none"></div>
                                     </div>
-                                    <h2 className="text-2xl font-black text-white tracking-widest uppercase drop-shadow-md">{currentArena.name}</h2>
-                                    <span className="text-[10px] font-bold text-indigo-300 uppercase mt-1 tracking-widest">{currentArena.desc}</span>
+                                    <h2 className="text-3xl font-black text-white tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{currentArena.name}</h2>
+                                    <span className="text-xs font-bold text-indigo-300 uppercase mt-1 tracking-widest bg-black/50 px-3 py-1 rounded-full mt-2 border border-white/10 backdrop-blur-sm">{currentArena.desc}</span>
                                 </div>
 
                                 <button
