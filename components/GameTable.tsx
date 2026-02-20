@@ -23,8 +23,8 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
 
     // CLASH ROYALE UX STATE
     const arenas = [
-        { id: 'cpu', name: 'Training Camp', desc: 'VS CPU', bg: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&q=80', icon: 'fa-robot' },
-        { id: 'pvp', name: 'Arena 1', desc: 'LOCAL PVP', bg: 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&q=80', icon: 'fa-user-friends' }
+        { id: 'cpu', name: 'Training Camp', desc: 'VS CPU', bg: '/arenas/arena_training_bg.png', cardBg: '/arenas/arena_training_card.png' },
+        { id: 'pvp', name: 'Arena 1', desc: 'LOCAL PVP', bg: '/arenas/arena_1_bg.png', cardBg: '/arenas/arena_1_card.png' }
     ];
     const [selectedArenaIdx, setSelectedArenaIdx] = useState(0);
     const [activeRules] = useState<GameRules>(game.rules || {
@@ -544,8 +544,9 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                                 </button>
 
                                 <div className="flex flex-col items-center animate-fade-in text-center px-4">
-                                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-800 border-2 border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.6)] flex items-center justify-center mb-3">
-                                        <i className={`fas ${currentArena.icon} text-2xl text-white`}></i>
+                                    <div className="w-32 h-20 mb-3 rounded-xl border-2 border-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.6)] overflow-hidden relative">
+                                        <img src={currentArena.cardBg} className="w-full h-full object-cover relative z-10" alt={currentArena.name} />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-20"></div>
                                     </div>
                                     <h2 className="text-2xl font-black text-white tracking-widest uppercase drop-shadow-md">{currentArena.name}</h2>
                                     <span className="text-[10px] font-bold text-indigo-300 uppercase mt-1 tracking-widest">{currentArena.desc}</span>
@@ -572,15 +573,25 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                                 <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-300"></div>
                                 <div className="relative flex items-center justify-between bg-slate-900 border border-slate-700 p-4 rounded-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-slate-800 rounded border border-slate-600 flex items-center justify-center shadow-inner">
-                                            <i className="fas fa-layer-group text-slate-400"></i>
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="font-bold text-white text-sm">{selectedDeck ? selectedDeck.name : "Select a Deck"}</span>
+                                        {selectedDeck && selectedDeck.cardIds.length > 0 ? (
+                                            <div className="w-12 h-16 bg-slate-800 rounded border border-slate-600 flex items-center justify-center shadow-inner overflow-hidden flex-shrink-0">
+                                                <img
+                                                    src={cards.find(c => c.id === selectedDeck.cardIds[0])?.imageUrl}
+                                                    className="w-full h-full object-cover scale-[1.3]"
+                                                    alt="Deck Cover"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="w-10 h-10 bg-slate-800 rounded border border-slate-600 flex items-center justify-center shadow-inner flex-shrink-0">
+                                                <i className="fas fa-layer-group text-slate-400"></i>
+                                            </div>
+                                        )}
+                                        <div className="flex flex-col items-start ml-1">
+                                            <span className="font-bold text-white text-sm text-left truncate max-w-[160px]">{selectedDeck ? selectedDeck.name : "Select a Deck"}</span>
                                             <span className="text-[10px] text-slate-400">{selectedDeck ? `${selectedDeck.cardIds.length} Cards` : 'No deck chosen'}</span>
                                         </div>
                                     </div>
-                                    <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                    <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors flex-shrink-0">
                                         <i className="fas fa-exchange-alt text-xs"></i>
                                     </div>
                                 </div>
