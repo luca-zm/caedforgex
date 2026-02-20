@@ -232,7 +232,19 @@ Your primary goal is to **${winCondDesc}**
                 generateUIBackground('Book Library Scroll Cards Research', game.artStyle),
                 generateUIBackground('Scales Balance Law Order Chains', game.artStyle)
             ]);
-            setSectionBgs({ vitality, economy, hand, constraints });
+            const newSectionBgs = { vitality, economy, hand, constraints };
+            setSectionBgs(newSectionBgs);
+
+            // AUTO-SAVE TO PERSIST TO CLOUDFLARE R2 IMMEDIATELY
+            onSaveRules({
+                ...rules,
+                sectionBgs: newSectionBgs,
+                _extra: {
+                    boardTheme,
+                    promoCards,
+                    inviteCode
+                }
+            });
         } catch (e) {
             console.error("Theme gen failed", e);
             alert("Failed to visualize themes. Try again.");

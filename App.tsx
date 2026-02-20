@@ -343,7 +343,9 @@ const App: React.FC = () => {
                 ...game,
                 rules: { ...game.rules, ...actualRules },
                 // Merge visual assets directly into the root GameProject where they belong
-                ...(_extra || {})
+                boardTheme: _extra?.boardTheme || game.boardTheme,
+                promoCards: _extra?.promoCards || game.promoCards,
+                inviteCode: _extra?.inviteCode || game.inviteCode
             };
 
             // Call API and receive the version with R2 URLs
@@ -351,7 +353,8 @@ const App: React.FC = () => {
 
             // Sync React state with the finalized remote object
             if (savedGame) {
-                setGames(prev => prev.map(g => g.id === gameId ? savedGame : g));
+                // Ensure we merge the server's updated `rules` (with R2 URLs) into the state
+                setGames(prev => prev.map(g => g.id === gameId ? { ...savedGame, rules: savedGame.rules } : g));
             } else {
                 setGames(prev => prev.map(g => g.id === gameId ? updatedGame : g));
             }

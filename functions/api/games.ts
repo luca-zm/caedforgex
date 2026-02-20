@@ -81,6 +81,28 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
     }
 
+    // Detect Base64 and Upload to R2 for Section Backgrounds (vitality, economy, etc.)
+    if (game.rules && game.rules.sectionBgs) {
+      const keys = ['vitality', 'economy', 'hand', 'constraints'] as const;
+      for (const bgKey of keys) {
+        const bgUrl = game.rules.sectionBgs[bgKey];
+        if (bgUrl && bgUrl.startsWith('data:image')) {
+          const matches = bgUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+          if (matches && matches.length === 3) {
+            const buffer = Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0));
+            const key = `worlds/${game.id}/section-${bgKey}-${Date.now()}.png`;
+
+            await context.env.BUCKET.put(key, buffer, {
+              httpMetadata: { contentType: 'image/png' }
+            });
+
+            // Update the object with the public URL
+            game.rules.sectionBgs[bgKey] = `${context.env.PUBLIC_R2_URL}/${key}`;
+          }
+        }
+      }
+    }
+
     // Check if exists to determine Insert or Update
     const existing = await context.env.DB.prepare("SELECT id FROM games WHERE id = ?").bind(game.id).first();
 
