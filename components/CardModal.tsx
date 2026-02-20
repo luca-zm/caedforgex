@@ -38,9 +38,9 @@ export const CardModal: React.FC<CardModalProps> = ({ card, onClose }) => {
                     className="relative perspective-1000 animate-slideUp cursor-default flex flex-col items-center"
                     onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the card itself
                 >
-                    {/* Dynamically reduced Scale for better visibility on mobile */}
+                    {/* Dynamically increased Scale by 10% for better detail viewing */}
                     <div className="transform transition-transform duration-300 hover:scale-105">
-                        <CardComponent card={card} scale={isMobile ? 1.2 : 1.5} />
+                        <CardComponent card={card} scale={isMobile ? 1.32 : 1.65} />
                     </div>
 
                     {/* Fluff/Info below card */}

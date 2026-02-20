@@ -176,8 +176,11 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                 <div className="absolute top-1/2 -translate-y-1/2 w-[98%] h-[65%] bg-[#1c1917] rotate-[2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center right' }}></div>
 
                 {/* Main Plaque */}
-                <div className="bg-gradient-to-b from-[#57534e] via-[#292524] to-[#1c1917] border-[2px] border-b-[3px] border-[#fbbf24] px-4 py-[4px] rounded-[6px] shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_1px_3px_rgba(255,255,255,0.2)] relative z-10 w-[90%] flex items-center justify-center">
-                  <span className="font-extrabold text-[12px] text-white tracking-widest uppercase z-10 font-serif" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
+                <div
+                  className="bg-gradient-to-b from-[#57534e] via-[#292524] to-[#1c1917] border-[2px] border-b-[3px] border-[#fbbf24] px-4 py-[4px] rounded-[6px] shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_1px_3px_rgba(255,255,255,0.2)] relative z-10 w-[90%] flex items-center justify-center overflow-hidden"
+                  style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-scales.png'), linear-gradient(to bottom, #57534e, #292524, #1c1917)" }}
+                >
+                  <span className="font-extrabold text-[10px] text-white tracking-widest uppercase z-10 font-serif truncate w-full text-center block" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
                     {card.name || "Unknown"}
                   </span>
                 </div>
