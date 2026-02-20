@@ -179,7 +179,7 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
                 <div className={`absolute -top-6 left-0 right-0 flex justify-center gap-4 z-40 pointer-events-none transition-all duration-300 ${panelMode === 'MINIMIZED' ? 'opacity-0 translate-y-10' : 'opacity-100'}`}>
                     <button
                         onClick={handleSave}
-                        className="pointer-events-auto bg-gradient-to-r from-emerald-500 to-emerald-700 text-white font-black text-sm uppercase tracking-wider px-8 py-3 rounded-full shadow-[0_4px_15px_rgba(16,185,129,0.5)] hover:scale-110 transition-transform active:scale-95 flex items-center gap-2"
+                        className={`${panelMode === 'MINIMIZED' ? 'pointer-events-none' : 'pointer-events-auto'} bg-gradient-to-r from-emerald-500 to-emerald-700 text-white font-black text-sm uppercase tracking-wider px-8 py-3 rounded-full shadow-[0_4px_15px_rgba(16,185,129,0.5)] hover:scale-110 transition-transform active:scale-95 flex items-center gap-2`}
                     >
                         <i className="fas fa-check"></i> Save Card
                     </button>
