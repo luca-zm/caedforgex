@@ -6,6 +6,17 @@ export enum CardType {
   LAND = 'LAND'
 }
 
+export interface Skill {
+  id: string;
+  name: string;
+  description: string;
+  allowedTypes: CardType[];
+  maxHealth?: number;
+  maxAttack?: number;
+  minCost?: number;
+  tier: 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+}
+
 export type ArtStyle = 'FANTASY_OIL' | 'CYBERPUNK' | 'PIXEL_ART' | 'ANIME' | 'LOVECRAFT' | 'MINIMALIST';
 
 export type BoardType = 'NONE' | 'LANES' | 'GRID' | 'MAP';
@@ -14,53 +25,53 @@ export type BoardType = 'NONE' | 'LANES' | 'GRID' | 'MAP';
 export type ResourceType = 'MANA_RAMP' | 'FIXED_ENERGY' | 'NO_COST';
 
 export interface DeckConstraints {
-    minCards: number;
-    maxCards: number;
-    allowedTypes: CardType[];
-    maxCopiesPerCard: number;
+  minCards: number;
+  maxCards: number;
+  allowedTypes: CardType[];
+  maxCopiesPerCard: number;
 }
 
 export interface PromoCard {
-    title: string;
-    description: string;
-    icon: string; // FontAwesome icon class
+  title: string;
+  description: string;
+  icon: string; // FontAwesome icon class
 }
 
 export interface BoardTheme {
-    backgroundUrl: string; // AI Generated Image
-    borderColor: string;
-    texture: 'MAT' | 'WOOD' | 'METAL' | 'HOLOGRAPHIC';
+  backgroundUrl: string; // AI Generated Image
+  borderColor: string;
+  texture: 'MAT' | 'WOOD' | 'METAL' | 'HOLOGRAPHIC';
 }
 
 export interface GameRules {
-    // Core Stats
-    initialHealth: number; // e.g., 20, 30, 40
-    
-    // Economy
-    resourceType: ResourceType; 
-    maxResource: number; // Cap (e.g. 10 mana or 3 action points)
-    startingResource: number; // Turn 1 resource
+  // Core Stats
+  initialHealth: number; // e.g., 20, 30, 40
 
-    // Turn Logic
-    cardsPerTurn: number; // Draw count per turn
-    startingHandSize: number;
+  // Economy
+  resourceType: ResourceType;
+  maxResource: number; // Cap (e.g. 10 mana or 3 action points)
+  startingResource: number; // Turn 1 resource
 
-    // Victory
-    winCondition: 'REDUCE_HEALTH' | 'MILL_DECK'; // Can expand later
-    
-    // Legacy / Fluff
-    boardType: BoardType;
-    fullText: string; // Generated explanation
-    constraints: DeckConstraints;
-    multiplayerMode: 'RANKED' | 'CASUAL' | 'INVITE_ONLY';
+  // Turn Logic
+  cardsPerTurn: number; // Draw count per turn
+  startingHandSize: number;
 
-    // UI Visuals for Rules Editor
-    sectionBgs?: {
-        vitality: string;
-        economy: string;
-        hand: string;
-        constraints: string;
-    };
+  // Victory
+  winCondition: 'REDUCE_HEALTH' | 'MILL_DECK'; // Can expand later
+
+  // Legacy / Fluff
+  boardType: BoardType;
+  fullText: string; // Generated explanation
+  constraints: DeckConstraints;
+  multiplayerMode: 'RANKED' | 'CASUAL' | 'INVITE_ONLY';
+
+  // UI Visuals for Rules Editor
+  sectionBgs?: {
+    vitality: string;
+    economy: string;
+    hand: string;
+    constraints: string;
+  };
 }
 
 export interface GameProject {
@@ -98,18 +109,18 @@ export interface Deck {
 }
 
 export interface BoardInstance {
-    instanceId: string;
-    cardId: string;
-    owner: 'PLAYER' | 'CPU'; // NEW FIELD
-    tapped: boolean;
-    x: number;
-    y: number;
-    currentHealth: number;
-    currentAttack: number;
-    summoningSickness: boolean;
-    shake?: boolean; // For visual feedback
-    damageIndicator?: number | null; // For floating damage numbers
-    dummy?: boolean;
+  instanceId: string;
+  cardId: string;
+  owner: 'PLAYER' | 'CPU'; // NEW FIELD
+  tapped: boolean;
+  x: number;
+  y: number;
+  currentHealth: number;
+  currentAttack: number;
+  summoningSickness: boolean;
+  shake?: boolean; // For visual feedback
+  damageIndicator?: number | null; // For floating damage numbers
+  dummy?: boolean;
 }
 
 export interface GameState {
