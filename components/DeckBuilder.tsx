@@ -62,16 +62,29 @@ const ManaCurve = ({ cards }: { cards: CardData[] }) => {
 
 // 2. Tactile Grid Card (Supercell Style)
 const AutoScalingCard = ({ card, count, isSelected, onToggle, onInspect }: any) => {
-    return (
-        <div className="w-full relative group aspect-[240/340] cursor-pointer" onClick={() => onToggle(card.id)}>
-            <div className={`
-                absolute inset-0 transition-all duration-300 ease-out
-                ${isSelected ? '-translate-y-2 scale-[1.02] drop-shadow-[0_10px_15px_rgba(217,70,239,0.3)]' : 'scale-[0.95] drop-shadow-md hover:scale-[0.98]'}
-                active:scale-[0.92]
-            `}>
-                <CardComponent card={card} scale={1} staticMode={true} />
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [scale, setScale] = useState(1);
 
-                {/* Active Selection Glow removed based on user feedback */}
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new ResizeObserver((entries) => {
+            if (entries[0]) {
+                // CardComponent base width is 240px
+                setScale(entries[0].contentRect.width / 240);
+            }
+        });
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div ref={containerRef} className="w-full relative group aspect-[240/340] cursor-pointer" onClick={() => onToggle(card.id)}>
+            <div className={`
+                absolute top-0 left-0 origin-top-left transition-all duration-300 ease-out
+                ${isSelected ? '-translate-y-2 drop-shadow-[0_10px_15px_rgba(217,70,239,0.3)]' : 'drop-shadow-md group-hover:-translate-y-1'}
+                active:scale-[0.92]
+            `} style={{ transform: `scale(${isSelected ? scale * 1.02 : scale})`, width: 240, height: 340 }}>
+                <CardComponent card={card} scale={1} staticMode={true} />
             </div>
 
             {/* Level/Count Badge (Supercell Style: Bottom right, solid, punchy) */}
@@ -421,7 +434,7 @@ export const DeckBuilder: React.FC<DeckBuilderProps> = ({
                     </div>
                 )}
 
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                     {filteredLibrary.map(card => {
                         const count = currentDeck.cardIds.filter(id => id === card.id).length;
                         return (
