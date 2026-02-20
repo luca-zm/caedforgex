@@ -37,7 +37,7 @@ interface Env {
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   const url = new URL(context.request.url);
   const gameId = url.searchParams.get('gameId');
-  
+
   if (!gameId) return new Response("Missing gameId", { status: 400 });
 
   const { results } = await context.env.DB.prepare("SELECT * FROM cards WHERE gameId = ? ORDER BY createdAt DESC").bind(gameId).all();
@@ -51,36 +51,36 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // Detect Base64 and Upload to R2
     if (card.imageUrl && card.imageUrl.startsWith('data:image')) {
-        const matches = card.imageUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-        if (matches && matches.length === 3) {
-            const buffer = Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0));
-            const key = `cards/${card.gameId}/${card.id}-${Date.now()}.png`;
-            
-            await context.env.BUCKET.put(key, buffer, {
-                httpMetadata: { contentType: 'image/png' }
-            });
-            
-            // Construct Public URL
-            // Ensure env.PUBLIC_R2_URL is set in Cloudflare Dashboard
-            finalImageUrl = `${context.env.PUBLIC_R2_URL}/${key}`;
-        }
+      const matches = card.imageUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const buffer = Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0));
+        const key = `cards/${card.gameId}/${card.id}-${Date.now()}.png`;
+
+        await context.env.BUCKET.put(key, buffer, {
+          httpMetadata: { contentType: 'image/png' }
+        });
+
+        // Construct Public URL
+        // Ensure env.PUBLIC_R2_URL is set in Cloudflare Dashboard
+        finalImageUrl = `${context.env.PUBLIC_R2_URL}/${key}`;
+      }
     }
 
     // Upsert logic
     const existing = await context.env.DB.prepare("SELECT id FROM cards WHERE id = ?").bind(card.id).first();
-    
+
     if (existing) {
-         await context.env.DB.prepare(
-            "UPDATE cards SET name=?, type=?, cost=?, attack=?, health=?, description=?, imageUrl=? WHERE id=?"
-        ).bind(
-            card.name, card.type, card.cost, card.attack || 0, card.health || 0, card.description, finalImageUrl, card.id
-        ).run();
+      await context.env.DB.prepare(
+        "UPDATE cards SET name=?, type=?, cost=?, attack=?, health=?, description=?, imageUrl=?, userId=? WHERE id=?"
+      ).bind(
+        card.name, card.type, card.cost, card.attack || 0, card.health || 0, card.description, finalImageUrl, card.userId || null, card.id
+      ).run();
     } else {
-         await context.env.DB.prepare(
-            "INSERT INTO cards (id, gameId, name, type, cost, attack, health, description, imageUrl, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        ).bind(
-            card.id, card.gameId, card.name, card.type, card.cost, card.attack || 0, card.health || 0, card.description, finalImageUrl, card.createdAt
-        ).run();
+      await context.env.DB.prepare(
+        "INSERT INTO cards (id, gameId, name, type, cost, attack, health, description, imageUrl, createdAt, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      ).bind(
+        card.id, card.gameId, card.name, card.type, card.cost, card.attack || 0, card.health || 0, card.description, finalImageUrl, card.createdAt, card.userId || null
+      ).run();
     }
 
     // Return the updated card with the remote URL so UI can update state

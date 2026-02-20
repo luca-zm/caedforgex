@@ -36,8 +36,8 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   const { results } = await context.env.DB.prepare("SELECT * FROM decks WHERE gameId = ?").bind(gameId).all();
   // Parse cardIds string to array
   const parsed = results.map((d: any) => ({
-      ...d,
-      cardIds: d.cardIds ? JSON.parse(d.cardIds) : []
+    ...d,
+    cardIds: d.cardIds ? JSON.parse(d.cardIds) : []
   }));
   return new Response(JSON.stringify(parsed), { headers: { 'Content-Type': 'application/json' } });
 }
@@ -45,17 +45,17 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const deck = await context.request.json() as any;
-    
+
     const existing = await context.env.DB.prepare("SELECT id FROM decks WHERE id = ?").bind(deck.id).first();
-    
+
     if (existing) {
-        await context.env.DB.prepare("UPDATE decks SET name=?, cardIds=? WHERE id=?")
-        .bind(deck.name, JSON.stringify(deck.cardIds), deck.id).run();
+      await context.env.DB.prepare("UPDATE decks SET name=?, cardIds=?, userId=? WHERE id=?")
+        .bind(deck.name, JSON.stringify(deck.cardIds), deck.userId || null, deck.id).run();
     } else {
-        await context.env.DB.prepare("INSERT INTO decks (id, gameId, name, cardIds) VALUES (?, ?, ?, ?)")
-        .bind(deck.id, deck.gameId, deck.name, JSON.stringify(deck.cardIds)).run();
+      await context.env.DB.prepare("INSERT INTO decks (id, gameId, name, cardIds, userId) VALUES (?, ?, ?, ?, ?)")
+        .bind(deck.id, deck.gameId, deck.name, JSON.stringify(deck.cardIds), deck.userId || null).run();
     }
-    
+
     return new Response(JSON.stringify({ success: true }), { headers: { 'Content-Type': 'application/json' } });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e.message }), { status: 500 });
@@ -63,10 +63,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 }
 
 export const onRequestDelete: PagesFunction<Env> = async (context) => {
-    const url = new URL(context.request.url);
-    const id = url.searchParams.get('id');
-    if(!id) return new Response("Missing ID", { status: 400 });
+  const url = new URL(context.request.url);
+  const id = url.searchParams.get('id');
+  if (!id) return new Response("Missing ID", { status: 400 });
 
-    await context.env.DB.prepare("DELETE FROM decks WHERE id = ?").bind(id).run();
-    return new Response(JSON.stringify({ success: true }));
+  await context.env.DB.prepare("DELETE FROM decks WHERE id = ?").bind(id).run();
+  return new Response(JSON.stringify({ success: true }));
 }

@@ -11,6 +11,8 @@ import { GuideView } from './components/GuideView';
 import { CardModal } from './components/CardModal';
 import { StaticRules } from './components/StaticRules';
 import { storageService } from './services/storageService';
+import { useAuth } from './components/AuthProvider';
+import { LandingPage } from './components/LandingPage';
 
 // --- STARTER SET DATA (20 Cards) ---
 const R2_BASE = 'https://pub-1c2e7d5133474fdbac45a2cebbed73c6.r2.dev/cards/GLOBAL_CORE';
@@ -57,6 +59,9 @@ const App: React.FC = () => {
     const [cards, setCards] = useState<CardData[]>([]);
     const [decks, setDecks] = useState<Deck[]>([]);
     const [activeDeckId, setActiveDeckId] = useState<string | null>(null);
+
+    // Auth Integration
+    const { currentUser, loading: authLoading } = useAuth();
 
     // Card Inspection State
     const [inspectingCard, setInspectingCard] = useState<CardData | null>(null);
@@ -114,8 +119,11 @@ const App: React.FC = () => {
 
             setLoading(false);
         };
-        init();
-    }, []);
+        // Only fetch once auth state is resolved and user exists
+        if (currentUser) {
+            init();
+        }
+    }, [currentUser]);
 
     // LOAD GAME DATA WHEN GAME SELECTED
     useEffect(() => {
@@ -300,6 +308,25 @@ const App: React.FC = () => {
         });
         await storageService.saveDeck(updatedDeck);
     };
+
+    // AUTHENTICATION GATE
+    if (authLoading) {
+        return (
+            <div className="w-full h-screen bg-[#050407] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-opacity-50"></div>
+            </div>
+        );
+    }
+
+    // Force email verification check for email/password users
+    // Note: Google users often have emailVerified=true automatically by Firebase
+    const isEmailVerified = currentUser?.emailVerified || currentUser?.providerData?.some(p => p.providerId === 'google.com');
+
+    if (!currentUser || !isEmailVerified) {
+        return <LandingPage />;
+    }
+
+    // --- MAIN RENDER ---
 
     const handleDeleteDeck = async (id: string) => {
         setDecks(prev => prev.filter(d => d.id !== id));
