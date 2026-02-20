@@ -33,24 +33,30 @@ async function generateAll() {
     for (const art of RULES_ART) {
         console.log(`Generating [${art.id}]...`);
         try {
-            const response = await ai.models.generateImages({
-                model: 'imagen-3.0-generate-002',
-                prompt: art.prompt,
+            const responseImg = await ai.models.generateContent({
+                model: 'gemini-2.5-flash-image',
+                contents: { parts: [{ text: art.prompt }] },
                 config: {
-                    numberOfImages: 1,
-                    aspectRatio: "16:9",
-                    outputMimeType: "image/png"
-                }
+                    responseModalities: ["IMAGE"]
+                },
             });
 
-            if (response.generatedImages && response.generatedImages.length > 0) {
-                const base64 = response.generatedImages[0].image.imageBytes;
-                const buffer = Buffer.from(base64, 'base64');
-                const filePath = path.join(OUT_DIR, `${art.id}.png`);
-                fs.writeFileSync(filePath, buffer);
-                console.log(`✅ Saved ${art.id}.png`);
+            if (responseImg.candidates && responseImg.candidates[0].content && responseImg.candidates[0].content.parts) {
+                let found = false;
+                for (const part of responseImg.candidates[0].content.parts) {
+                    if (part.inlineData && part.inlineData.data) {
+                        const base64 = part.inlineData.data;
+                        const buffer = Buffer.from(base64, 'base64');
+                        const filePath = path.join(OUT_DIR, `${art.id}.png`);
+                        fs.writeFileSync(filePath, buffer);
+                        console.log(`✅ Saved ${art.id}.png`);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) console.warn(`⚠️ No inlineData found for ${art.id}`);
             } else {
-                console.warn(`⚠️ No image returned for ${art.id}`);
+                console.warn(`⚠️ Unexpected response format for ${art.id}`);
             }
         } catch (e) {
             console.error(`❌ Error generating ${art.id}:`, e.message);

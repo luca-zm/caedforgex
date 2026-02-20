@@ -40,7 +40,7 @@ export const StaticRules: React.FC<StaticRulesProps> = ({ game }) => {
                 <div className="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl group flex flex-col">
                     <div className="h-32 relative overflow-hidden">
                         <img
-                            src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80"
+                            src="/rules/rule_deck.png"
                             className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                             alt="Deck Rule"
                         />
@@ -76,7 +76,7 @@ export const StaticRules: React.FC<StaticRulesProps> = ({ game }) => {
                 <div className="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl group flex flex-col">
                     <div className="h-32 relative overflow-hidden">
                         <img
-                            src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80"
+                            src="/rules/rule_energy.png"
                             className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                             alt="Resource Rule"
                         />
@@ -112,7 +112,7 @@ export const StaticRules: React.FC<StaticRulesProps> = ({ game }) => {
                 <div className="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl group flex flex-col">
                     <div className="h-32 relative overflow-hidden">
                         <img
-                            src="https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&q=80"
+                            src="/rules/rule_combat.png"
                             className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                             alt="Combat Rule"
                         />
