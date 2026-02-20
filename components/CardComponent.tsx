@@ -58,28 +58,43 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   const getTypeTheme = (type: CardType) => {
     switch (type) {
       case CardType.UNIT: return {
-        bgColor: 'from-[#fecaca] to-[#ef4444]', // Red gradient
-        textColor: '#450a0a',
+        outerBorder: '#991b1b', // red-800
+        innerBg: '#ffe4e6',     // rose-100 (pale pink like mockup)
+        typeBg: '#fb7185',      // rose-400
+        textColor: '#4c1d95',   // dark purple/red text like mockup
+        lineColor: '#881337',   // rose-900
         icon: 'fa-skull'
       };
       case CardType.SPELL: return {
-        bgColor: 'from-[#bfdbfe] to-[#3b82f6]', // Blue gradient
-        textColor: '#172554',
+        outerBorder: '#1e40af', // blue-800
+        innerBg: '#dbeafe',     // blue-100
+        typeBg: '#60a5fa',      // blue-400
+        textColor: '#172554',   // blue-950
+        lineColor: '#1e3a8a',   // blue-900
         icon: 'fa-bolt'
       };
       case CardType.ARTIFACT: return {
-        bgColor: 'from-[#fef08a] to-[#eab308]', // Yellow gradient
-        textColor: '#422006',
+        outerBorder: '#854d0e', // yellow-800
+        innerBg: '#fef3c7',     // yellow-100
+        typeBg: '#facc15',      // yellow-400
+        textColor: '#422006',   // yellow-950
+        lineColor: '#713f12',   // yellow-900
         icon: 'fa-gem'
       };
       case CardType.LAND: return {
-        bgColor: 'from-[#bbf7d0] to-[#22c55e]', // Green gradient
-        textColor: '#052e16',
+        outerBorder: '#166534', // green-800
+        innerBg: '#dcfce7',     // green-100
+        typeBg: '#4ade80',      // green-400
+        textColor: '#052e16',   // green-950
+        lineColor: '#14532d',   // green-900
         icon: 'fa-tree'
       };
       default: return {
-        bgColor: 'from-[#e2e8f0] to-[#64748b]', // Slate gradient
-        textColor: '#0f172a',
+        outerBorder: '#334155', // slate-700
+        innerBg: '#f1f5f9',     // slate-100
+        typeBg: '#94a3b8',      // slate-400
+        textColor: '#0f172a',   // slate-900
+        lineColor: '#1e293b',   // slate-800
         icon: 'fa-question'
       };
     }
@@ -120,35 +135,30 @@ export const CardComponent: React.FC<CardComponentProps> = ({
         {/* ================= CARD FRONT ================= */}
         <div className={`absolute inset-0 w-full h-full ${staticMode ? '' : 'backface-hidden'}`}>
 
-          {/* THICK OUTER METALLIC BORDER (POKEMON STYLE) */}
-          <div className="absolute inset-0 rounded-[12px] bg-gradient-to-br from-[#e5e7eb] via-[#9ca3af] to-[#d1d5db] p-[8px] shadow-[0_0_15px_rgba(0,0,0,0.5)] flex flex-col box-border border-[2px] border-[#4b5563]">
+          {/* NEW FLAT ID-BADGE MOCKUP STYLE */}
+          <div className="absolute inset-0 rounded-[12px] flex flex-col box-border border-[10px] shadow-[0_0_20px_rgba(0,0,0,0.6)]" style={{ borderColor: theme.outerBorder, backgroundColor: theme.innerBg }}>
 
-            {/* INNER CARD TEMPLATE ("MASCHERA") */}
-            <div className={`flex-1 w-full bg-gradient-to-br ${theme.bgColor} rounded-sm overflow-hidden flex flex-col relative shadow-[inset_0_0_5px_rgba(0,0,0,0.3)]`}>
+            {/* Paper texture overlay */}
+            <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
 
-              {/* Paper Texture Overlay */}
-              <div className="absolute inset-0 mix-blend-multiply opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '3px 3px' }}></div>
+            <div className="flex-1 flex flex-col relative z-10">
 
               {/* HEADER */}
-              <div className="flex justify-between items-start w-full relative z-10 px-2 py-1.5">
-                <div className="flex flex-col">
-                  <span className="text-[7.5px] italic font-black uppercase tracking-widest opacity-80" style={{ color: theme.textColor }}>{card.type}</span>
-                  <span className="font-extrabold text-[15px] leading-none tracking-tight" style={{ color: theme.textColor }}>{card.name || "Unknown"}</span>
-                </div>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <span className="font-bold text-[8px] uppercase tracking-widest opacity-80" style={{ color: theme.textColor }}>Mana</span>
-                  <div className="w-[22px] h-[22px] rounded-full bg-[#f8fafc] flex items-center justify-center font-black text-[12px] shadow-sm border border-black/20" style={{ color: theme.textColor }}>
-                    {card.cost}
-                  </div>
+              <div className="flex justify-between items-center px-2 py-1.5 border-b-[1.5px]" style={{ borderColor: theme.lineColor }}>
+                <span className="font-bold text-[13px] tracking-wide uppercase font-sans" style={{ color: theme.textColor }}>
+                  {card.name || "Unknown"}
+                </span>
+                <div className="flex items-center justify-center w-[20px] h-[20px] rounded-full border-[1.5px] bg-white shadow-sm" style={{ borderColor: theme.lineColor, color: theme.textColor }}>
+                  <span className="font-extrabold text-[12px] leading-none mb-px">{card.cost}</span>
                 </div>
               </div>
 
               {/* ILLUSTRATION BOX */}
-              <div className="w-full relative z-10 bg-black mt-1 mb-2 px-1.5 box-border" style={{ height: '48%' }}>
-                {/* The double gold/silver border wrapper */}
-                <div className="w-full h-full border-[2.5px] border-[#9ca3af] shadow-[0_0_0_1px_#ca8a04,inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden bg-white">
+              <div className="w-full relative z-10 px-2 pt-2" style={{ height: '48%' }}>
+                {/* Inner White + Outer Gold border wrapper */}
+                <div className="w-full h-full rounded-sm border-[2.5px] border-white shadow-[0_0_0_1.5px_#ca8a04] relative overflow-hidden bg-black">
                   {card.imageUrl && !isImageLoaded && (
-                    <div className="absolute inset-0 bg-[#e5e7eb] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
                       <i className="fas fa-spinner fa-spin text-gray-400 text-xl"></i>
                     </div>
                   )}
@@ -157,7 +167,8 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                       src={card.imageUrl}
                       onLoad={() => setIsImageLoaded(true)}
                       onError={() => setIsImageLoaded(true)}
-                      className={`w-full h-full object-cover relative z-20 transition-opacity duration-300 ${isImageLoaded ? 'opacity-100' : 'opacity-0'} hover:scale-105 transition-transform`}
+                      // Critical Scale-[1.35] crops the baked-in white bars from NanoBanana AI
+                      className={`w-full h-full object-cover scale-[1.35] translate-y-[-2%] relative z-20 transition-opacity duration-300 ${isImageLoaded ? 'opacity-100' : 'opacity-0'} hover:scale-[1.4] transition-transform`}
                       alt="Card Art"
                       loading="lazy"
                     />
@@ -166,13 +177,23 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                       <i className={`fas ${theme.icon} text-4xl`}></i>
                     </div>
                   )}
+                  {/* Glossy image overlay */}
+                  {!staticMode && <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 z-30 pointer-events-none"></div>}
                 </div>
               </div>
 
+              {/* TYPE BAR */}
+              <div className="w-full mt-2.5 border-y-[1.5px] py-[3px] px-2.5 flex items-center relative z-10" style={{ backgroundColor: theme.typeBg, borderColor: theme.lineColor }}>
+                <i className={`fas ${theme.icon} text-[9px] mr-1.5`} style={{ color: theme.textColor }}></i>
+                <span className="font-black text-[9px] uppercase tracking-widest" style={{ color: theme.textColor }}>
+                  {card.type}
+                </span>
+              </div>
+
               {/* LORE / DESCRIPTION */}
-              <div className="flex-1 flex flex-col relative z-10 px-2 overflow-hidden pb-1">
-                <div className="overflow-y-auto custom-scrollbar flex-1">
-                  <p className="font-serif font-semibold text-[11px] leading-snug" style={{ color: theme.textColor }}>
+              <div className="flex-1 flex flex-col pt-1.5 px-2.5 overflow-hidden">
+                <div className="overflow-y-auto custom-scrollbar flex-1 mb-1">
+                  <p className="font-serif font-medium text-[11px] leading-snug" style={{ color: theme.textColor }}>
                     {card.description}
                   </p>
                 </div>
@@ -180,16 +201,16 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
               {/* FOOTER (STATS) */}
               {card.type === CardType.UNIT && (
-                <div className="w-full flex justify-between items-center py-1.5 px-3 mt-1 border-t border-black/20 relative z-10 bg-white/10">
-                  <div className="flex items-center gap-1.5">
-                    <i className="fas fa-gavel text-[10px]" style={{ color: theme.textColor }}></i>
-                    <span className="text-[10px] font-bold opacity-80" style={{ color: theme.textColor }}>ATK</span>
-                    <span className="font-black text-[18px]" style={{ color: theme.textColor }}>{card.attack}</span>
+                <div className="w-[90%] mx-auto flex justify-between items-center pb-1.5 pt-1 border-t-[1px]" style={{ borderColor: theme.lineColor }}>
+                  <div className="flex items-center gap-1 opacity-90">
+                    <i className="fas fa-gavel text-[8px]" style={{ color: theme.textColor }}></i>
+                    <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: theme.textColor }}>ATK</span>
+                    <span className="font-black text-[15px] leading-none" style={{ color: theme.textColor }}>{card.attack}</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-black text-[18px]" style={{ color: theme.textColor }}>{card.health}</span>
-                    <span className="text-[10px] font-bold opacity-80" style={{ color: theme.textColor }}>HP</span>
-                    <i className="fas fa-heart text-[10px]" style={{ color: theme.textColor }}></i>
+                  <div className="flex items-center gap-1 opacity-90">
+                    <span className="font-black text-[15px] leading-none" style={{ color: theme.textColor }}>{card.health}</span>
+                    <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: theme.textColor }}>HP</span>
+                    <i className="fas fa-heart text-[8px]" style={{ color: theme.textColor }}></i>
                   </div>
                 </div>
               )}
