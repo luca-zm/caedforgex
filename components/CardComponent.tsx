@@ -58,58 +58,28 @@ export const CardComponent: React.FC<CardComponentProps> = ({
   const getTypeTheme = (type: CardType) => {
     switch (type) {
       case CardType.UNIT: return {
-        outerGlow: 'rgba(239, 68, 68, 0.4)', // red-500
-        outerBg: '#fee2e2', // red-100
-        outerBorder: '#7f1d1d', // red-900
-        innerBorder: '#450a0a', // red-950
-        headerBg: '#fca5a5', // red-300
-        headerText: '#450a0a', // red-950
-        typeBarBg: '#f87171', // red-400
-        typeText: '#450a0a', // red-950
+        bgColor: 'from-[#fecaca] to-[#ef4444]', // Red gradient
+        textColor: '#450a0a',
         icon: 'fa-skull'
       };
       case CardType.SPELL: return {
-        outerGlow: 'rgba(59, 130, 246, 0.4)', // blue-500
-        outerBg: '#dbeafe', // blue-100
-        outerBorder: '#1e3a8a', // blue-900
-        innerBorder: '#172554', // blue-950
-        headerBg: '#93c5fd', // blue-300
-        headerText: '#172554', // blue-950
-        typeBarBg: '#60a5fa', // blue-400
-        typeText: '#172554', // blue-950
+        bgColor: 'from-[#bfdbfe] to-[#3b82f6]', // Blue gradient
+        textColor: '#172554',
         icon: 'fa-bolt'
       };
       case CardType.ARTIFACT: return {
-        outerGlow: 'rgba(234, 179, 8, 0.4)', // yellow-500
-        outerBg: '#fef3c7', // yellow-100
-        outerBorder: '#78350f', // amber-900
-        innerBorder: '#451a03', // amber-950
-        headerBg: '#fcd34d', // yellow-300
-        headerText: '#451a03', // amber-950
-        typeBarBg: '#fbbf24', // yellow-400
-        typeText: '#451a03', // amber-950
+        bgColor: 'from-[#fef08a] to-[#eab308]', // Yellow gradient
+        textColor: '#422006',
         icon: 'fa-gem'
       };
       case CardType.LAND: return {
-        outerGlow: 'rgba(34, 197, 94, 0.4)', // green-500
-        outerBg: '#dcfce7', // green-100
-        outerBorder: '#14532d', // green-900
-        innerBorder: '#052e16', // green-950
-        headerBg: '#86efac', // green-300
-        headerText: '#052e16', // green-950
-        typeBarBg: '#4ade80', // green-400
-        typeText: '#052e16', // green-950
+        bgColor: 'from-[#bbf7d0] to-[#22c55e]', // Green gradient
+        textColor: '#052e16',
         icon: 'fa-tree'
       };
       default: return {
-        outerGlow: 'rgba(100, 116, 139, 0.4)', // slate-500
-        outerBg: '#f1f5f9', // slate-100
-        outerBorder: '#0f172a', // slate-900
-        innerBorder: '#020617', // slate-950
-        headerBg: '#cbd5e1', // slate-300
-        headerText: '#020617', // slate-950
-        typeBarBg: '#94a3b8', // slate-400
-        typeText: '#020617', // slate-950
+        bgColor: 'from-[#e2e8f0] to-[#64748b]', // Slate gradient
+        textColor: '#0f172a',
         icon: 'fa-question'
       };
     }
@@ -150,87 +120,79 @@ export const CardComponent: React.FC<CardComponentProps> = ({
         {/* ================= CARD FRONT ================= */}
         <div className={`absolute inset-0 w-full h-full ${staticMode ? '' : 'backface-hidden'}`}>
 
-          <div
-            className="absolute inset-0 rounded-[12px] overflow-hidden flex flex-col box-border"
-            style={{
-              backgroundColor: theme.outerBg,
-              border: `8px solid ${theme.outerBorder}`,
-              boxShadow: `inset 0 0 0 1px ${theme.innerBorder}, 0px 10px 20px -5px ${theme.outerGlow}`
-            }}
-          >
-            {/* Paper texture overlay */}
-            <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
+          {/* THICK OUTER METALLIC BORDER (POKEMON STYLE) */}
+          <div className="absolute inset-0 rounded-[12px] bg-gradient-to-br from-[#e5e7eb] via-[#9ca3af] to-[#d1d5db] p-[8px] shadow-[0_0_15px_rgba(0,0,0,0.5)] flex flex-col box-border border-[2px] border-[#4b5563]">
 
-            <div className="flex-1 flex flex-col relative z-10 p-1">
+            {/* INNER CARD TEMPLATE ("MASCHERA") */}
+            <div className={`flex-1 w-full bg-gradient-to-br ${theme.bgColor} rounded-sm overflow-hidden flex flex-col relative shadow-[inset_0_0_5px_rgba(0,0,0,0.3)]`}>
 
-              {/* HEADER BAR */}
-              <div className="flex justify-between items-center px-1.5 py-1 mb-1 border-b-[2px]" style={{ borderColor: theme.innerBorder }}>
-                <span className="font-extrabold text-[12px] tracking-tight uppercase" style={{ color: theme.headerText }}>
-                  {card.name || "Unknown"}
-                </span>
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border-[1.5px] bg-white shadow-sm" style={{ borderColor: theme.innerBorder }}>
-                  <span className="font-black text-[11px]" style={{ color: theme.headerText }}>{card.cost}</span>
+              {/* Paper Texture Overlay */}
+              <div className="absolute inset-0 mix-blend-multiply opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '3px 3px' }}></div>
+
+              {/* HEADER */}
+              <div className="flex justify-between items-start w-full relative z-10 px-2 py-1.5">
+                <div className="flex flex-col">
+                  <span className="text-[7.5px] italic font-black uppercase tracking-widest opacity-80" style={{ color: theme.textColor }}>{card.type}</span>
+                  <span className="font-extrabold text-[15px] leading-none tracking-tight" style={{ color: theme.textColor }}>{card.name || "Unknown"}</span>
+                </div>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className="font-bold text-[8px] uppercase tracking-widest opacity-80" style={{ color: theme.textColor }}>Mana</span>
+                  <div className="w-[22px] h-[22px] rounded-full bg-[#f8fafc] flex items-center justify-center font-black text-[12px] shadow-sm border border-black/20" style={{ color: theme.textColor }}>
+                    {card.cost}
+                  </div>
                 </div>
               </div>
 
-              {/* IMAGE SQUARE */}
-              <div className="w-full aspect-square bg-white rounded-sm overflow-hidden border-[2px] shadow-inner relative flex-shrink-0" style={{ borderColor: theme.innerBorder }}>
-                {card.imageUrl && !isImageLoaded && (
-                  <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-                    <i className="fas fa-spinner fa-spin text-gray-400 text-xl"></i>
-                  </div>
-                )}
-                {card.imageUrl ? (
-                  <img
-                    src={card.imageUrl}
-                    onLoad={() => setIsImageLoaded(true)}
-                    onError={() => setIsImageLoaded(true)}
-                    className={`w-full h-full object-cover relative z-20 transition-opacity duration-300 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-                    alt="Card Art"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300 relative z-20">
-                    <i className={`fas ${theme.icon} text-4xl`}></i>
-                  </div>
-                )}
-
-                {/* Glossy image overlay */}
-                {!staticMode && <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500 z-30 pointer-events-none"></div>}
-              </div>
-
-              {/* TYPE BAR */}
-              <div className="w-full px-1.5 py-[2px] my-1 flex justify-between items-center border-[1.5px] rounded-sm shadow-sm" style={{ background: theme.typeBarBg, borderColor: theme.innerBorder }}>
-                <div className="flex items-center gap-1.5">
-                  <i className={`fas ${theme.icon} text-[8px]`} style={{ color: theme.typeText }}></i>
-                  <span className="font-extrabold text-[9px] uppercase tracking-wider" style={{ color: theme.typeText }}>
-                    {card.type}
-                  </span>
+              {/* ILLUSTRATION BOX */}
+              <div className="w-full relative z-10 bg-black mt-1 mb-2 px-1.5 box-border" style={{ height: '48%' }}>
+                {/* The double gold/silver border wrapper */}
+                <div className="w-full h-full border-[2.5px] border-[#9ca3af] shadow-[0_0_0_1px_#ca8a04,inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden bg-white">
+                  {card.imageUrl && !isImageLoaded && (
+                    <div className="absolute inset-0 bg-[#e5e7eb] flex items-center justify-center">
+                      <i className="fas fa-spinner fa-spin text-gray-400 text-xl"></i>
+                    </div>
+                  )}
+                  {card.imageUrl ? (
+                    <img
+                      src={card.imageUrl}
+                      onLoad={() => setIsImageLoaded(true)}
+                      onError={() => setIsImageLoaded(true)}
+                      className={`w-full h-full object-cover relative z-20 transition-opacity duration-300 ${isImageLoaded ? 'opacity-100' : 'opacity-0'} hover:scale-105 transition-transform`}
+                      alt="Card Art"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300 relative z-20">
+                      <i className={`fas ${theme.icon} text-4xl`}></i>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* LORE / DESCRIPTION & STATS */}
-              <div className="flex-1 flex flex-col justify-between px-1.5 pb-0.5 overflow-hidden">
-                <div className="overflow-y-auto custom-scrollbar flex-1 mb-1">
-                  <p className="font-serif font-medium text-[10.5px] leading-snug" style={{ color: theme.headerText }}>
+              {/* LORE / DESCRIPTION */}
+              <div className="flex-1 flex flex-col relative z-10 px-2 overflow-hidden pb-1">
+                <div className="overflow-y-auto custom-scrollbar flex-1">
+                  <p className="font-serif font-semibold text-[11px] leading-snug" style={{ color: theme.textColor }}>
                     {card.description}
                   </p>
                 </div>
-
-                {/* STATS (UNIT ONLY) */}
-                {card.type === CardType.UNIT && (
-                  <div className="flex justify-between items-end border-t pt-1 mt-auto shrink-0" style={{ borderColor: theme.innerBorder + '40' }}>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[7px] font-bold uppercase opacity-70" style={{ color: theme.headerText }}>ATK</span>
-                      <span className="font-black text-[14px]" style={{ color: theme.headerText }}>{card.attack}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="font-black text-[14px]" style={{ color: theme.headerText }}>{card.health}</span>
-                      <span className="text-[7px] font-bold uppercase opacity-70" style={{ color: theme.headerText }}>HP</span>
-                    </div>
-                  </div>
-                )}
               </div>
+
+              {/* FOOTER (STATS) */}
+              {card.type === CardType.UNIT && (
+                <div className="w-full flex justify-between items-center py-1.5 px-3 mt-1 border-t border-black/20 relative z-10 bg-white/10">
+                  <div className="flex items-center gap-1.5">
+                    <i className="fas fa-gavel text-[10px]" style={{ color: theme.textColor }}></i>
+                    <span className="text-[10px] font-bold opacity-80" style={{ color: theme.textColor }}>ATK</span>
+                    <span className="font-black text-[18px]" style={{ color: theme.textColor }}>{card.attack}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-black text-[18px]" style={{ color: theme.textColor }}>{card.health}</span>
+                    <span className="text-[10px] font-bold opacity-80" style={{ color: theme.textColor }}>HP</span>
+                    <i className="fas fa-heart text-[10px]" style={{ color: theme.textColor }}></i>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
