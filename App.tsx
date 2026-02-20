@@ -141,9 +141,23 @@ const App: React.FC = () => {
                         globalCardsPromise
                     ]);
 
-                    // --- INJECT STARTER SET IF MISSING ---
-                    if (activeGameId === 'GLOBAL_CORE' && globalCards.length === 0) {
-                        console.log("Injecting Starter Set...");
+                    // --- INJECT OR UPGRADE STARTER SET ---
+                    let needsInjection = false;
+                    if (activeGameId === 'GLOBAL_CORE') {
+                        if (globalCards.length === 0) {
+                            needsInjection = true;
+                        } else {
+                            // Force an upgrade if old Unsplash placeholders are found in the DB
+                            const hasOldPlaceholders = globalCards.some(c => c.imageUrl && c.imageUrl.includes('unsplash.com'));
+                            if (hasOldPlaceholders) {
+                                needsInjection = true;
+                                console.log("Old placeholder images detected in Global Core. Forcing starter deck upgrade.");
+                            }
+                        }
+                    }
+
+                    if (needsInjection) {
+                        console.log("Injecting/Upgrading Starter Set...");
 
                         // SEQUENTIAL SAVE (CRITICAL FIX): 
                         // Avoid Promise.all() for local storage writes to prevent race conditions causing infinite loops or missing data.
@@ -151,18 +165,25 @@ const App: React.FC = () => {
                             await storageService.saveCard(c);
                         }
 
-                        // Create CPU Starter Deck
-                        const starterDeck: Deck = {
-                            id: 'cpu-starter-deck',
-                            gameId: 'GLOBAL_CORE',
-                            name: 'CPU Standard',
-                            cardIds: STARTER_CARDS.map(c => c.id) // Add all 20 cards
-                        };
-                        await storageService.saveDeck(starterDeck);
+                        // Upsert CPU Starter Deck
+                        let starterDeck = localDecks.find(d => d.id === 'cpu-starter-deck') || globalDecks.find(d => d.id === 'cpu-starter-deck');
+                        if (!starterDeck) {
+                            starterDeck = {
+                                id: 'cpu-starter-deck',
+                                gameId: 'GLOBAL_CORE',
+                                name: 'CPU Standard',
+                                cardIds: STARTER_CARDS.map(c => c.id) // Add all 20 cards
+                            };
+                            await storageService.saveDeck(starterDeck);
+                        }
 
                         // Update Local State immediately
                         setCards(STARTER_CARDS);
-                        setDecks([starterDeck]);
+
+                        // Merge the starter deck without duplicating if it already existed
+                        const otherLocalDecks = localDecks.filter(d => d.id !== 'cpu-starter-deck');
+                        const otherGlobalDecks = globalDecks.filter(d => d.id !== 'cpu-starter-deck');
+                        setDecks([...otherLocalDecks, ...otherGlobalDecks, starterDeck]);
 
                     } else {
                         setCards(localCards);
