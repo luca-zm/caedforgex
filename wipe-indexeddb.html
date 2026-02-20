@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Wiper</title></head>
+<body>
+<script>
+    const req = indexedDB.deleteDatabase('CardForgeDB');
+    req.onsuccess = function () {
+        console.log("Deleted database successfully");
+    };
+    req.onerror = function () {
+        console.log("Couldn't delete database");
+    };
+    req.onblocked = function () {
+        console.log("Couldn't delete database due to the operation being blocked");
+    };
+</script>
+</body>
+</html>

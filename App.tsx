@@ -14,32 +14,32 @@ import { storageService } from './services/storageService';
 // --- STARTER SET DATA (20 Cards) ---
 const STARTER_CARDS: CardData[] = [
     // LANDS (4)
-    { id: 'start_land_1', gameId: 'GLOBAL_CORE', name: 'Neon Citadel', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: 'https://images.unsplash.com/photo-1535868463750-c78d9543614f?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_land_2', gameId: 'GLOBAL_CORE', name: 'Ancient Ruins', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_land_3', gameId: 'GLOBAL_CORE', name: 'Orbital Station', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_land_4', gameId: 'GLOBAL_CORE', name: 'Deep Forest', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: 'https://images.unsplash.com/photo-1448375240586-dfd8d395ea6c?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
+    { id: 'start_land_1', gameId: 'GLOBAL_CORE', name: 'Neon Citadel', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: '/starter/start_land_1.png', createdAt: 0 },
+    { id: 'start_land_2', gameId: 'GLOBAL_CORE', name: 'Ancient Ruins', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: '/starter/start_land_2.png', createdAt: 0 },
+    { id: 'start_land_3', gameId: 'GLOBAL_CORE', name: 'Orbital Station', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: '/starter/start_land_3.png', createdAt: 0 },
+    { id: 'start_land_4', gameId: 'GLOBAL_CORE', name: 'Deep Forest', type: CardType.LAND, cost: 0, description: 'Grants +1 Max Mana.', imageUrl: '/starter/start_land_4.png', createdAt: 0 },
 
     // UNITS (8)
-    { id: 'start_unit_1', gameId: 'GLOBAL_CORE', name: 'Scout Drone', type: CardType.UNIT, cost: 1, attack: 1, health: 2, description: 'Fast and cheap.', imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_2', gameId: 'GLOBAL_CORE', name: 'Goblin Grunt', type: CardType.UNIT, cost: 1, attack: 2, health: 1, description: 'Haste. (Attacks immediately)', imageUrl: 'https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_3', gameId: 'GLOBAL_CORE', name: 'Cyber Wolf', type: CardType.UNIT, cost: 2, attack: 3, health: 2, description: 'A relentless hunter.', imageUrl: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_4', gameId: 'GLOBAL_CORE', name: 'Shield Bearer', type: CardType.UNIT, cost: 2, attack: 1, health: 5, description: 'A solid defense.', imageUrl: 'https://images.unsplash.com/photo-1626262410065-9430c72b2600?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_5', gameId: 'GLOBAL_CORE', name: 'Plasma Marine', type: CardType.UNIT, cost: 3, attack: 4, health: 3, description: 'Standard infantry.', imageUrl: 'https://images.unsplash.com/photo-1560667087-73d919427b59?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_6', gameId: 'GLOBAL_CORE', name: 'Arcane Mage', type: CardType.UNIT, cost: 3, attack: 2, health: 2, description: 'On Play: Damage 2 to opponent.', imageUrl: 'https://images.unsplash.com/photo-1633511090164-b43840ea1607?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_7', gameId: 'GLOBAL_CORE', name: 'Mech Titan', type: CardType.UNIT, cost: 5, attack: 6, health: 6, description: 'Heavy armor.', imageUrl: 'https://images.unsplash.com/photo-1535378437327-b7ce492c10aa?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_unit_8', gameId: 'GLOBAL_CORE', name: 'Void Dragon', type: CardType.UNIT, cost: 7, attack: 8, health: 8, description: 'Flying terror.', imageUrl: 'https://images.unsplash.com/photo-1577493340887-b7bfff550145?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
+    { id: 'start_unit_1', gameId: 'GLOBAL_CORE', name: 'Scout Drone', type: CardType.UNIT, cost: 1, attack: 1, health: 2, description: 'Fast and cheap.', imageUrl: '/starter/start_unit_1.png', createdAt: 0 },
+    { id: 'start_unit_2', gameId: 'GLOBAL_CORE', name: 'Goblin Grunt', type: CardType.UNIT, cost: 1, attack: 2, health: 1, description: 'Haste. (Attacks immediately)', imageUrl: '/starter/start_unit_2.png', createdAt: 0 },
+    { id: 'start_unit_3', gameId: 'GLOBAL_CORE', name: 'Cyber Wolf', type: CardType.UNIT, cost: 2, attack: 3, health: 2, description: 'A relentless hunter.', imageUrl: '/starter/start_unit_3.png', createdAt: 0 },
+    { id: 'start_unit_4', gameId: 'GLOBAL_CORE', name: 'Shield Bearer', type: CardType.UNIT, cost: 2, attack: 1, health: 5, description: 'A solid defense.', imageUrl: '/starter/start_unit_4.png', createdAt: 0 },
+    { id: 'start_unit_5', gameId: 'GLOBAL_CORE', name: 'Plasma Marine', type: CardType.UNIT, cost: 3, attack: 4, health: 3, description: 'Standard infantry.', imageUrl: '/starter/start_unit_5.png', createdAt: 0 },
+    { id: 'start_unit_6', gameId: 'GLOBAL_CORE', name: 'Arcane Mage', type: CardType.UNIT, cost: 3, attack: 2, health: 2, description: 'On Play: Damage 2 to opponent.', imageUrl: '/starter/start_unit_6.png', createdAt: 0 },
+    { id: 'start_unit_7', gameId: 'GLOBAL_CORE', name: 'Mech Titan', type: CardType.UNIT, cost: 5, attack: 6, health: 6, description: 'Heavy armor.', imageUrl: '/starter/start_unit_7.png', createdAt: 0 },
+    { id: 'start_unit_8', gameId: 'GLOBAL_CORE', name: 'Void Dragon', type: CardType.UNIT, cost: 7, attack: 8, health: 8, description: 'Flying terror.', imageUrl: '/starter/start_unit_8.png', createdAt: 0 },
 
     // SPELLS (6)
-    { id: 'start_spell_1', gameId: 'GLOBAL_CORE', name: 'Fireball', type: CardType.SPELL, cost: 2, description: 'Deal 3 Damage to opponent.', imageUrl: 'https://images.unsplash.com/photo-1620023696582-78d123d51eb9?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_spell_2', gameId: 'GLOBAL_CORE', name: 'Data Leak', type: CardType.SPELL, cost: 3, description: 'Draw 2 Cards.', imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_spell_3', gameId: 'GLOBAL_CORE', name: 'Nano Repair', type: CardType.SPELL, cost: 2, description: 'Heal 5 Health.', imageUrl: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_spell_4', gameId: 'GLOBAL_CORE', name: 'Overclock', type: CardType.SPELL, cost: 1, description: 'Buff Target Unit (+1/+1).', imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_spell_5', gameId: 'GLOBAL_CORE', name: 'System Crash', type: CardType.SPELL, cost: 4, description: 'Destroy all units (Not really implemented, but sounds cool).', imageUrl: 'https://images.unsplash.com/photo-1517430816045-df4b7de8db98?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_spell_6', gameId: 'GLOBAL_CORE', name: 'Energy Shield', type: CardType.SPELL, cost: 1, description: 'Heal 3.', imageUrl: 'https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
+    { id: 'start_spell_1', gameId: 'GLOBAL_CORE', name: 'Fireball', type: CardType.SPELL, cost: 2, description: 'Deal 3 Damage to opponent.', imageUrl: '/starter/start_spell_1.png', createdAt: 0 },
+    { id: 'start_spell_2', gameId: 'GLOBAL_CORE', name: 'Data Leak', type: CardType.SPELL, cost: 3, description: 'Draw 2 Cards.', imageUrl: '/starter/start_spell_2.png', createdAt: 0 },
+    { id: 'start_spell_3', gameId: 'GLOBAL_CORE', name: 'Nano Repair', type: CardType.SPELL, cost: 2, description: 'Heal 5 Health.', imageUrl: '/starter/start_spell_3.png', createdAt: 0 },
+    { id: 'start_spell_4', gameId: 'GLOBAL_CORE', name: 'Overclock', type: CardType.SPELL, cost: 1, description: 'Buff Target Unit (+1/+1).', imageUrl: '/starter/start_spell_4.png', createdAt: 0 },
+    { id: 'start_spell_5', gameId: 'GLOBAL_CORE', name: 'System Crash', type: CardType.SPELL, cost: 4, description: 'Destroy all units (Not really implemented, but sounds cool).', imageUrl: '/starter/start_spell_5.png', createdAt: 0 },
+    { id: 'start_spell_6', gameId: 'GLOBAL_CORE', name: 'Energy Shield', type: CardType.SPELL, cost: 1, description: 'Heal 3.', imageUrl: '/starter/start_spell_6.png', createdAt: 0 },
 
     // ARTIFACTS (2)
-    { id: 'start_art_1', gameId: 'GLOBAL_CORE', name: 'Mana Prism', type: CardType.ARTIFACT, cost: 2, description: 'Start turn with +1 Mana.', imageUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1000&auto=format&fit=crop', createdAt: 0 },
-    { id: 'start_art_2', gameId: 'GLOBAL_CORE', name: 'Auto Turret', type: CardType.ARTIFACT, cost: 3, description: 'Deal 1 Damage to opponent at start of turn.', imageUrl: 'https://images.unsplash.com/photo-1589254065909-b7086221d0eb?q=80&w=1000&auto=format&fit=crop', createdAt: 0 }
+    { id: 'start_art_1', gameId: 'GLOBAL_CORE', name: 'Mana Prism', type: CardType.ARTIFACT, cost: 2, description: 'Start turn with +1 Mana.', imageUrl: '/starter/start_art_1.png', createdAt: 0 },
+    { id: 'start_art_2', gameId: 'GLOBAL_CORE', name: 'Auto Turret', type: CardType.ARTIFACT, cost: 3, description: 'Deal 1 Damage to opponent at start of turn.', imageUrl: '/starter/start_art_2.png', createdAt: 0 }
 ];
 
 const App: React.FC = () => {
