@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
-import { CardData, CardType, GameProject, Deck } from '../types';
-import { generateCardArt, generateCardFluff } from '../services/geminiService';
+import React, { useState, useEffect } from 'react';
+import { CardData, CardType, GameProject, Deck, Skill } from '../types';
+import { generateCardArt } from '../services/geminiService';
 import { CardComponent } from './CardComponent';
 
 interface CardCreatorProps {
@@ -24,6 +24,17 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
 
     // Strict filter
     const gameDecks = decks.filter(d => d.gameId === game.id);
+
+    const [skills, setSkills] = useState<Skill[]>([]);
+
+    useEffect(() => {
+        fetch('/api/skills')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setSkills(data);
+            })
+            .catch(console.error);
+    }, []);
 
     const [card, setCard] = useState<CardData>({
         id: '',
@@ -52,17 +63,13 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
         }
     };
 
-    const handleGenerateFluff = async () => {
-        setLoadingText(true);
-        try {
-            const desc = await generateCardFluff(card.name, card.type, game.name);
-            setCard(prev => ({ ...prev, description: desc }));
-        } catch (e: any) {
-            alert(`Text Gen Failed: ${e.message}`);
-        } finally {
-            setLoadingText(false);
-        }
-    };
+    const eligibleSkills = skills.filter(s => {
+        if (!s.allowedTypes.includes(card.type)) return false;
+        if (s.maxHealth !== null && s.maxHealth !== undefined && card.health! > s.maxHealth) return false;
+        if (s.maxAttack !== null && s.maxAttack !== undefined && card.attack! > s.maxAttack) return false;
+        if (s.minCost !== null && s.minCost !== undefined && card.cost! < s.minCost) return false;
+        return true;
+    });
 
     const handleSave = (e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -82,7 +89,13 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
             return;
         }
 
-        const newCard = { ...card, id: crypto.randomUUID(), gameId: game.id, createdAt: Date.now() };
+        let finalDescription = 'No ability.';
+        if (eligibleSkills.length > 0) {
+            const rolled = eligibleSkills[Math.floor(Math.random() * Math.max(1, eligibleSkills.length))];
+            finalDescription = `**${rolled.name}**: ${rolled.description}`;
+        }
+
+        const newCard = { ...card, id: crypto.randomUUID(), gameId: game.id, description: finalDescription, createdAt: Date.now() };
         onSave(newCard, targetDeckId || undefined);
 
         // Soft Reset
@@ -367,28 +380,42 @@ export const CardCreator: React.FC<CardCreatorProps> = ({ game, decks, onSave })
                         {/* === LORE TAB === */}
                         {activeTab === 'lore' && (
                             <div className="space-y-6 animate-fadeIn pb-10">
-                                {/* Narrative Console */}
-                                <div className="relative group">
-                                    <div className="absolute inset-0 bg-yellow-500/10 rounded-2xl blur-lg group-hover:bg-yellow-500/20 transition-all"></div>
-                                    <div className="bg-black/80 backdrop-blur-xl border border-white/10 p-1 rounded-2xl relative z-10 group-focus-within:border-yellow-500/50 transition-colors duration-300">
-                                        <div className="flex items-center justify-between px-4 py-2 bg-white/5 rounded-t-xl border-b border-white/5">
-                                            <div className="flex items-center gap-2">
-                                                <i className="fas fa-book-sparkles text-yellow-400 text-xs"></i>
-                                                <span className="text-[10px] font-bold text-yellow-400 uppercase tracking-widest">Card Chronicle</span>
+                                <div className="p-5 rounded-2xl bg-yellow-900/10 border border-yellow-500/20 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-yellow-500/5 blur-xl group-hover:bg-yellow-500/10 transition-colors"></div>
+                                    <div className="relative z-10">
+                                        <h3 className="text-yellow-400 font-black text-sm mb-2 flex items-center gap-2 tracking-wider uppercase">
+                                            <i className="fas fa-dice-d20 animate-pulse"></i> Deterministic Skill System
+                                        </h3>
+                                        <p className="text-xs text-yellow-100/60 leading-relaxed mb-6">
+                                            Card abilities are highly regulated by physical constraints. When you Forge this card, it will randomly roll <strong>exactly one</strong> ability from the eligible pool below based on its Type, Mana Cost, Attack, and Health.
+                                        </p>
+
+                                        <div className="bg-black/60 rounded-xl p-4 border border-white/5 shadow-inner">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                                                    <i className="fas fa-filter text-slate-500"></i> Eligible Roll Pool ({eligibleSkills.length})
+                                                </span>
                                             </div>
-                                            <div className="px-2 py-0.5 rounded bg-yellow-900/40 border border-yellow-500/30 text-[9px] font-bold text-yellow-300 uppercase">
-                                                TEXT
-                                            </div>
+                                            {eligibleSkills.length > 0 ? (
+                                                <div className="flex flex-wrap gap-2">
+                                                    {eligibleSkills.map(s => (
+                                                        <div key={s.id} className="text-[10px] uppercase font-bold tracking-widest bg-slate-800/80 text-yellow-400/90 px-3 py-1.5 rounded-md border border-yellow-500/20 shadow-sm flex items-center gap-1.5">
+                                                            <div className={`w-1.5 h-1.5 rounded-full ${s.tier === 'COMMON' ? 'bg-slate-400' : s.tier === 'RARE' ? 'bg-blue-400' : s.tier === 'EPIC' ? 'bg-purple-400' : 'bg-orange-400'}`}></div>
+                                                            {s.name}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center py-6 px-4 bg-red-900/10 rounded-lg border border-red-500/10">
+                                                    <i className="fas fa-exclamation-triangle text-red-500/50 mb-2"></i>
+                                                    <span className="text-xs text-red-400/80 italic font-medium text-center">No abilities mapped for these specific stat parameters. Adjust Physicals.</span>
+                                                </div>
+                                            )}
                                         </div>
-                                        <textarea
-                                            value={card.description}
-                                            onChange={(e) => setCard({ ...card, description: e.target.value })}
-                                            className="w-full bg-transparent border-none p-4 text-sm text-yellow-50 font-serif leading-relaxed h-48 resize-none focus:ring-0 placeholder-yellow-900/50"
-                                            placeholder="Enter card ability text or flavor lore..."
-                                        />
-                                        {/* Decorative Corner */}
-                                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-yellow-500/30 rounded-bl-lg m-2"></div>
                                     </div>
+
+                                    {/* Decorative Corner */}
+                                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-yellow-500/30 rounded-bl-2xl m-1 opacity-50"></div>
                                 </div>
                             </div>
                         )}
