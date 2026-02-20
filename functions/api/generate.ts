@@ -41,7 +41,7 @@ export async function onRequest(context: any) {
             }
 
             const responseImg = await ai.models.generateImages({
-                model: 'gemini-2.5-flash-image',
+                model: 'imagen-3.0-generate-002',
                 prompt: finalPrompt,
                 config: { aspectRatio, outputMimeType: 'image/png' },
             });
