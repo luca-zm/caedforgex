@@ -106,18 +106,18 @@ export const CardComponent: React.FC<CardComponentProps> = ({
             <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-20`}></div>
 
             {/* HEADER */}
-            <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/80 to-transparent z-10 p-3 flex justify-between items-start">
-              <div className="bg-black/40 backdrop-blur-md border border-white/10 px-2 py-0.5 rounded-md">
-                <span className="text-white font-bold text-[10px] uppercase tracking-wider text-shadow truncate max-w-[80px] block">{card.name || "Unknown"}</span>
+            <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-black/90 to-black/20 z-10 p-2 pl-3 flex justify-between items-start">
+              <div className="bg-black/60 shadow-lg backdrop-blur-md border border-white/10 px-2.5 py-0.5 rounded flex-1 mr-2 mt-0.5">
+                <span className="text-white font-black text-[11px] uppercase tracking-widest text-shadow truncate block w-full">{card.name || "Unknown"}</span>
               </div>
               {/* Mana Cost */}
-              <div className="w-6 h-6 -mt-1 -mr-1 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full border-2 border-white shadow-[0_0_10px_rgba(34,211,238,0.8)] flex items-center justify-center relative z-20">
-                <span className="text-white font-black text-xs drop-shadow-md">{card.cost}</span>
+              <div className="w-7 h-7 -mt-1 -mr-1 flex-shrink-0 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full border-[2.5px] border-[#e2e8f0] shadow-[0_0_12px_rgba(34,211,238,0.8)] flex items-center justify-center relative z-20">
+                <span className="text-white font-black text-[13px] drop-shadow-md">{card.cost}</span>
               </div>
             </div>
 
             {/* MAIN IMAGE */}
-            <div className="absolute top-9 left-2 right-2 h-[50%] bg-[#0a0a0a] rounded-lg overflow-hidden border-2 border-[#3f3b4a] shadow-inner group relative">
+            <div className="absolute top-[34px] left-[5px] right-[5px] bottom-[38%] bg-[#0a0a0a] rounded-sm overflow-hidden border border-[#3f3b4a] shadow-inner group relative">
               {/* Loading Mask */}
               {card.imageUrl && !isImageLoaded && (
                 <div className="absolute inset-0 bg-[#2a2638] animate-pulse z-10 flex items-center justify-center">
@@ -142,28 +142,28 @@ export const CardComponent: React.FC<CardComponentProps> = ({
               {!staticMode && <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30 pointer-events-none"></div>}
             </div>
 
-            {/* TEXT BOX */}
-            <div className="absolute bottom-2 left-2 right-2 top-[58%] bg-[#1a1824]/90 backdrop-blur-sm rounded-lg border border-[#3f3b4a] p-2 flex flex-col">
-              {/* Type Line */}
-              <div className="flex items-center gap-1 mb-1 opacity-80">
-                <i className={`fas ${theme.icon} text-[8px]`} style={{ color: theme.color }}></i>
-                <span className="text-[8px] font-bold text-white/70 uppercase tracking-widest truncate">{card.type}</span>
-              </div>
-              {/* Description */}
-              <div className="flex-1 overflow-hidden relative">
-                <p className="text-[8px] text-white/90 font-medium leading-relaxed font-sans line-clamp-4">{card.description}</p>
+            {/* TYPE BAR (SEPARATOR) */}
+            <div className={`absolute left-[5px] right-[5px] bottom-[calc(38%-22px)] h-[22px] bg-gradient-to-r ${theme.gradient} border border-white/20 shadow-md flex items-center px-2 shadow-[0_2px_4px_rgba(0,0,0,0.5)] z-20`}>
+              <i className={`fas ${theme.icon} text-[10px] text-white/90 mr-2 drop-shadow`}></i>
+              <span className="text-[10px] font-black text-white uppercase tracking-widest drop-shadow-md">{card.type}</span>
+            </div>
+
+            {/* TEXT BOX (LORE/DESCRIPTION) */}
+            <div className="absolute bottom-[6px] left-[6px] right-[6px] top-[calc(62%+24px)] bg-[#e6e1e5]/95 backdrop-blur-md rounded-sm border-2 border-l-4 border-[#3f3b4a] overflow-hidden flex flex-col" style={{ borderLeftColor: theme.color }}>
+              <div className="flex-1 p-2 overflow-y-auto custom-scrollbar">
+                <p className="text-[10.5px] text-[#1c1b1f] font-medium leading-relaxed font-serif whitespace-pre-wrap">{card.description}</p>
               </div>
             </div>
           </div>
 
           {/* 2. Stats (Unit Only) - Positioned OUTSIDE clipped container, but inside the 'front face' */}
           {card.type === CardType.UNIT && (
-            <div className="absolute bottom-[-8px] left-0 right-0 flex justify-center gap-10 z-20 pointer-events-none">
-              <div className="w-9 h-9 bg-[#991b1b] rounded-full border-[3px] border-[#fca5a5] flex items-center justify-center shadow-[0_4px_6px_rgba(0,0,0,0.5)] transform">
-                <span className="font-black text-sm text-white drop-shadow-md">{card.attack}</span>
+            <div className="absolute bottom-[2px] left-0 right-0 flex justify-center gap-10 z-20 pointer-events-none">
+              <div className="w-8 h-8 bg-[#991b1b] rounded-full border-[2.5px] border-[#fca5a5] flex items-center justify-center shadow-[0_4px_6px_rgba(0,0,0,0.5)] transform">
+                <span className="font-black text-xs text-white drop-shadow-md">{card.attack}</span>
               </div>
-              <div className="w-9 h-9 bg-[#166534] rounded-full border-[3px] border-[#86efac] flex items-center justify-center shadow-[0_4px_6px_rgba(0,0,0,0.5)] transform">
-                <span className="font-black text-sm text-white drop-shadow-md">{card.health}</span>
+              <div className="w-8 h-8 bg-[#166534] rounded-full border-[2.5px] border-[#86efac] flex items-center justify-center shadow-[0_4px_6px_rgba(0,0,0,0.5)] transform">
+                <span className="font-black text-xs text-white drop-shadow-md">{card.health}</span>
               </div>
             </div>
           )}
