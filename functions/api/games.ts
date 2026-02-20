@@ -65,6 +65,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
     }
 
+    // Detect Base64 and Upload to R2 for Board Art
+    if (game.rules && game.rules.boardTheme && game.rules.boardTheme.backgroundUrl && game.rules.boardTheme.backgroundUrl.startsWith('data:image')) {
+      const matches = game.rules.boardTheme.backgroundUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const buffer = Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0));
+        const key = `worlds/${game.id}/board-${Date.now()}.png`;
+
+        await context.env.BUCKET.put(key, buffer, {
+          httpMetadata: { contentType: 'image/png' }
+        });
+
+        // Construct Public URL
+        game.rules.boardTheme.backgroundUrl = `${context.env.PUBLIC_R2_URL}/${key}`;
+      }
+    }
+
     // Check if exists to determine Insert or Update
     const existing = await context.env.DB.prepare("SELECT id FROM games WHERE id = ?").bind(game.id).first();
 
@@ -100,7 +116,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     // Return the updated game with the remote URL so UI can update state
-    return new Response(JSON.stringify({ success: true, iconUrl: finalIconUrl }), { headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true, iconUrl: finalIconUrl, rules: game.rules }), { headers: { 'Content-Type': 'application/json' } });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e.message }), { status: 500 });
   }

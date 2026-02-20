@@ -215,7 +215,8 @@ const App: React.FC = () => {
 
 
     const handleCreateGame = async (game: GameProject) => {
-        setGames(prev => [game, ...prev]);
+        const savedGame = await storageService.saveGame(game);
+        setGames(prev => [savedGame || game, ...prev]);
 
         // Track ownership locally
         const newCreated = [...createdGameIds, game.id];
@@ -224,8 +225,6 @@ const App: React.FC = () => {
         setJoinedGameIds(newJoined);
         localStorage.setItem('cf_created_ids', JSON.stringify(newCreated));
         localStorage.setItem('cf_joined_ids', JSON.stringify(newJoined));
-
-        await storageService.saveGame(game);
     };
 
     const handleJoinGame = (gameId: string) => {
@@ -347,8 +346,15 @@ const App: React.FC = () => {
                 ...(_extra || {})
             };
 
-            setGames(prev => prev.map(g => g.id === gameId ? updatedGame : g));
-            await storageService.saveGame(updatedGame);
+            // Call API and receive the version with R2 URLs
+            const savedGame = await storageService.saveGame(updatedGame);
+
+            // Sync React state with the finalized remote object
+            if (savedGame) {
+                setGames(prev => prev.map(g => g.id === gameId ? savedGame : g));
+            } else {
+                setGames(prev => prev.map(g => g.id === gameId ? updatedGame : g));
+            }
         }
     };
 

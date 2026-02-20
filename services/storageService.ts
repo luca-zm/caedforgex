@@ -38,7 +38,7 @@ export const storageService = {
         }
     },
 
-    async saveGame(game: GameProject): Promise<void> {
+    async saveGame(game: GameProject): Promise<GameProject | void> {
         const payload = { ...game, userId: auth.currentUser?.uid };
         try {
             const res = await fetch(`${API_URL}/games`, {
@@ -46,13 +46,21 @@ export const storageService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (!res.ok) throw new Error("API Save Failed");
+            const data = await res.json();
+
+            // Reconstruct the game with server-generated URLs
+            return {
+                ...payload,
+                iconUrl: data.iconUrl || payload.iconUrl,
+                rules: data.rules || payload.rules
+            };
         } catch (e) {
             console.warn("Saving to LocalStorage fallback");
             const games = await storageService.getGames();
             const idx = games.findIndex(g => g.id === payload.id);
             const newGames = idx >= 0 ? games.map(g => g.id === payload.id ? payload : g) : [payload, ...games];
             localStorage.setItem('cf_games', JSON.stringify(newGames));
+            return payload;
         }
     },
 
