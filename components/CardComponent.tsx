@@ -62,35 +62,40 @@ export const CardComponent: React.FC<CardComponentProps> = ({
         borderColor: '#4b5563', // gray-600
         emblemColor: '#dc2626', // red-600
         textColor: '#1c1917',   // stone-900 (for parchment)
-        icon: 'fa-skull'
+        icon: 'fa-skull',
+        bg: 'from-[#ef4444] to-[#991b1b]'
       };
       case CardType.SPELL: return {
         texture: '/frames/spell_bg.png',
         borderColor: '#1e3a8a', // blue-900
         emblemColor: '#2563eb', // blue-600
         textColor: '#1c1917',
-        icon: 'fa-bolt'
+        icon: 'fa-bolt',
+        bg: 'from-[#3b82f6] to-[#1e3a8a]'
       };
       case CardType.ARTIFACT: return {
         texture: '/frames/artifact_bg.png',
         borderColor: '#854d0e', // yellow-800
         emblemColor: '#d97706', // amber-600
         textColor: '#1c1917',
-        icon: 'fa-gem'
+        icon: 'fa-gem',
+        bg: 'from-[#f59e0b] to-[#b45309]'
       };
       case CardType.LAND: return {
         texture: '/frames/land_bg.png',
         borderColor: '#14532d', // green-900
         emblemColor: '#16a34a', // green-600
         textColor: '#1c1917',
-        icon: 'fa-tree'
+        icon: 'fa-tree',
+        bg: 'from-[#22c55e] to-[#14532d]'
       };
       default: return {
         texture: '/frames/unit_bg.png',
         borderColor: '#334155', // slate-700
         emblemColor: '#64748b', // slate-500
         textColor: '#1c1917',
-        icon: 'fa-question'
+        icon: 'fa-question',
+        bg: 'from-[#94a3b8] to-[#475569]'
       };
     }
   };
@@ -169,15 +174,15 @@ export const CardComponent: React.FC<CardComponentProps> = ({
                 )}
               </div>
 
-              {/* TITLE RIBBON (Placed over the bottom edge of the portrait) */}
-              <div className="absolute w-[105%] left-1/2 -translate-x-1/2 top-[51%] z-20 flex justify-center drop-shadow-xl">
+              {/* TITLE RIBBON (Placed precisely at the border between image and parchment) */}
+              <div className="absolute w-[110%] left-1/2 -translate-x-1/2 top-[55%] z-20 flex justify-center drop-shadow-xl">
                 {/* Ribbon backing/tails (dark geometric shapes to ground the plaque) */}
-                <div className="absolute top-1/2 -translate-y-1/2 w-[98%] h-[65%] bg-[#1c1917] rotate-[-2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center left' }}></div>
-                <div className="absolute top-1/2 -translate-y-1/2 w-[98%] h-[65%] bg-[#1c1917] rotate-[2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center right' }}></div>
+                <div className="absolute top-1/2 -translate-y-1/2 w-[95%] h-[65%] bg-[#1c1917] rotate-[-2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center left' }}></div>
+                <div className="absolute top-1/2 -translate-y-1/2 w-[95%] h-[65%] bg-[#1c1917] rotate-[2deg] rounded-sm shadow-md z-0" style={{ transformOrigin: 'center right' }}></div>
 
                 {/* Main Plaque */}
                 <div
-                  className="bg-gradient-to-b from-[#57534e] via-[#292524] to-[#1c1917] border-[2px] border-b-[3px] border-[#fbbf24] px-4 py-[4px] rounded-[6px] shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_1px_3px_rgba(255,255,255,0.2)] relative z-10 w-[90%] flex items-center justify-center overflow-hidden"
+                  className="bg-gradient-to-b from-[#57534e] via-[#292524] to-[#1c1917] border-[2px] border-b-[3px] border-[#fbbf24] px-4 py-[4px] rounded-[6px] shadow-[0_8px_15px_rgba(0,0,0,0.8),inset_0_1px_3px_rgba(255,255,255,0.2)] relative z-10 w-[85%] flex items-center justify-center overflow-hidden"
                   style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/black-scales.png'), linear-gradient(to bottom, #57534e, #292524, #1c1917)" }}
                 >
                   <span className="font-extrabold text-[10px] text-white tracking-widest uppercase z-10 font-serif truncate w-full text-center block" style={{ textShadow: '2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
@@ -188,18 +193,12 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 
               {/* PARCHMENT LORE BOX */}
               <div
-                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] h-[38%] rounded-[10px] shadow-[inset_0_0_15px_rgba(0,0,0,0.6),0_5px_15px_rgba(0,0,0,0.5)] z-10 flex flex-col pt-[24px] pb-2 px-3 items-center text-center overflow-hidden"
+                className="absolute bottom-[2%] left-1/2 -translate-x-1/2 w-[90%] h-[38%] rounded-[10px] shadow-[inset_0_0_15px_rgba(0,0,0,0.6),0_5px_15px_rgba(0,0,0,0.5)] z-10 flex flex-col pt-3 pb-2 px-3 items-center text-center overflow-hidden"
                 style={{
                   backgroundImage: "url('/frames/parchment_bg.png')",
                   backgroundSize: '100% 100%'
                 }}
               >
-                {/* Inner Type Ribbon */}
-                <div className="absolute top-[2px] left-1/2 -translate-x-1/2 border-b-[2px] border-x-[2px] border-black/40 bg-[#e7e5e4] px-3 py-[2px] rounded-b-md shadow-sm">
-                  <span className="font-serif font-bold text-[9px] uppercase tracking-widest text-[#44403c]">
-                    <i className={`fas ${theme.icon} mr-1 hidden`}></i>{card.type}
-                  </span>
-                </div>
 
                 <div className="w-full h-full overflow-y-auto custom-scrollbar flex items-center justify-center mt-1 z-10 relative">
                   {/* Semi-transparent backing for legibility */}
@@ -213,6 +212,13 @@ export const CardComponent: React.FC<CardComponentProps> = ({
             </div>
 
             {/* FLOATING BADGES (Outside the clipping box) */}
+
+            {/* TYPE LOGO (Top Center) */}
+            <div className={`absolute -top-[16px] left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-gradient-to-br ${theme.bg} rounded-full border-[2px] border-[#9ca3af] shadow-[0_5px_15px_rgba(0,0,0,0.8),inset_0_0_10px_rgba(0,0,0,0.5)] z-30 flex items-center justify-center drop-shadow-2xl`}>
+              <i className={`fas ${theme.icon} text-white text-sm drop-shadow-[0_2px_2px_rgba(0,0,0,1)]`}></i>
+              {/* Shiny highlight */}
+              <div className="absolute top-[2px] right-[4px] w-[8px] h-[12px] bg-white/40 rounded-full rotate-45 blur-[1px]"></div>
+            </div>
 
             {/* MANA BADGE (Top Left, Blue Crystal Circle) */}
             <div className="absolute -top-[12px] -left-[14px] w-[50px] h-[50px] bg-gradient-to-br from-[#60a5fa] via-[#3b82f6] to-[#1e3a8a] rounded-full border-[3px] border-[#9ca3af] shadow-[0_5px_15px_rgba(0,0,0,0.8),inset_0_0_15px_#1d4ed8,inset_0_0_0_2px_#60a5fa] z-30 flex items-center justify-center drop-shadow-2xl">
