@@ -136,8 +136,8 @@ export const GuideView: React.FC<GuideViewProps> = ({ game }) => {
             {/* SCROLLABLE CONTENT */}
             <div className="flex-1 overflow-y-auto px-6 pb-28 no-scrollbar relative z-10">
 
-                {/* === VIEW 1: SYSTEM MANUAL (SHOWN IF GLOBAL OR TAB SELECTED) === */}
-                {(isGlobal || activeTab === 'SYSTEM') && (
+                {/* === VIEW 1: SYSTEM MANUAL === */}
+                {activeTab === 'SYSTEM' && (
                     <div className="space-y-6 animate-fadeIn">
                         <div className="p-4 rounded-xl bg-gradient-to-r from-fuchsia-900/40 to-purple-900/20 border border-fuchsia-500/30 mb-2">
                             <p className="text-xs text-fuchsia-100 leading-relaxed font-medium">
