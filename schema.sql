@@ -44,6 +44,18 @@ CREATE TABLE IF NOT EXISTS decks (
     userId TEXT -- Creator
 );
 
+-- Create Skills Table (Deterministic Ability Pool)
+CREATE TABLE IF NOT EXISTS skills (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    allowedTypes TEXT NOT NULL, -- JSON array of CardTypes (e.g. ["UNIT", "SPELL"])
+    maxHealth INTEGER, -- Optional constraint (e.g., must have <= 3 HP to get this skill)
+    maxAttack INTEGER, -- Optional constraint
+    minCost INTEGER, -- Optional constraint (e.g., must cost >= 4 to get this skill)
+    tier TEXT DEFAULT 'COMMON'
+);
+
 -- Index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_cards_game ON cards(gameId);
 CREATE INDEX IF NOT EXISTS idx_decks_game ON decks(gameId);
