@@ -26,3 +26,4 @@ dist-ssr
 # Firebase Keys
 *firebase-adminsdk*.json
 crm-forge-exp-firebase-adminsdk-*.json
+.wrangler

@@ -71,10 +71,7 @@ const AutoScalingCard = ({ card, count, isSelected, onToggle, onInspect }: any) 
             `}>
                 <CardComponent card={card} scale={1} staticMode={true} />
 
-                {/* Active Selection Glow (Subtle instead of thick ring) */}
-                {isSelected && (
-                    <div className="absolute inset-0 rounded-[14px] border-[2px] border-fuchsia-400 pointer-events-none z-10 box-shadow-[inset_0_0_15px_rgba(217,70,239,0.5)]"></div>
-                )}
+                {/* Active Selection Glow removed based on user feedback */}
             </div>
 
             {/* Level/Count Badge (Supercell Style: Bottom right, solid, punchy) */}
@@ -354,7 +351,7 @@ export const DeckBuilder: React.FC<DeckBuilderProps> = ({
                             const filledCard = fullTrayCards[index];
 
                             return (
-                                <div key={index} className="relative shrink-0 w-[52px] h-[72px]">
+                                <div key={index} className="relative shrink-0 w-[51px] h-[72px]">
                                     {/* Empty Socket Base */}
                                     <div className="absolute inset-0 rounded-md bg-[#1a1724] border-2 border-dashed border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]"></div>
 
@@ -362,17 +359,14 @@ export const DeckBuilder: React.FC<DeckBuilderProps> = ({
                                     {filledCard && (
                                         <div
                                             onClick={() => removeCardFromDeck(filledCard.id)}
-                                            className="absolute inset-0 rounded-md bg-slate-800 border border-white/20 overflow-hidden cursor-pointer shadow-md hover:-translate-y-1 active:scale-90 transition-all group"
+                                            className="absolute inset-0 cursor-pointer hover:-translate-y-1 active:scale-90 transition-all group flex items-center justify-center overflow-visible"
                                         >
-                                            <img src={filledCard.imageUrl} className="w-full h-full object-cover" alt="" />
-
-                                            {/* Mana Cost Mini Badge */}
-                                            <div className="absolute top-0 left-0 bg-blue-600 rounded-br border-b border-r border-black w-4 h-4 flex items-center justify-center shadow-sm">
-                                                <span className="text-white text-[8px] font-black">{filledCard.cost}</span>
+                                            <div className="pointer-events-none absolute top-0 left-0 origin-top-left" style={{ transform: 'scale(0.2125)' }}>
+                                                <CardComponent card={filledCard} scale={1} staticMode={true} />
                                             </div>
 
-                                            {/* Remove Overlay (Cleaner, floating X) */}
-                                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                            {/* Remove Overlay */}
+                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-[4px] z-50">
                                                 <div className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition-transform duration-200">
                                                     <i className="fas fa-times text-[10px]"></i>
                                                 </div>
