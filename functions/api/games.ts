@@ -26,6 +26,8 @@ type PagesFunction<Env = unknown, Params extends string = any, Data extends Reco
 
 interface Env {
   DB: D1Database;
+  BUCKET: any; // R2Bucket
+  PUBLIC_R2_URL: string;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
@@ -45,6 +47,23 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const game = await context.request.json() as any;
+    let finalIconUrl = game.iconUrl;
+
+    // Detect Base64 and Upload to R2
+    if (game.iconUrl && game.iconUrl.startsWith('data:image')) {
+      const matches = game.iconUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (matches && matches.length === 3) {
+        const buffer = Uint8Array.from(atob(matches[2]), c => c.charCodeAt(0));
+        const key = `worlds/${game.id}/icon-${Date.now()}.png`;
+
+        await context.env.BUCKET.put(key, buffer, {
+          httpMetadata: { contentType: 'image/png' }
+        });
+
+        // Construct Public URL
+        finalIconUrl = `${context.env.PUBLIC_R2_URL}/${key}`;
+      }
+    }
 
     // Check if exists to determine Insert or Update
     const existing = await context.env.DB.prepare("SELECT id FROM games WHERE id = ?").bind(game.id).first();
@@ -58,7 +77,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         game.artStyle,
         game.primaryColor,
         game.inviteCode || null,
-        game.iconUrl || null,
+        finalIconUrl || null,
         game.rules ? JSON.stringify(game.rules) : null,
         game.userId || null,
         game.id
@@ -74,13 +93,14 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         game.primaryColor,
         game.createdAt,
         game.inviteCode || null,
-        game.iconUrl || null,
+        finalIconUrl || null,
         game.rules ? JSON.stringify(game.rules) : null,
         game.userId || null
       ).run();
     }
 
-    return new Response(JSON.stringify({ success: true }), { headers: { 'Content-Type': 'application/json' } });
+    // Return the updated game with the remote URL so UI can update state
+    return new Response(JSON.stringify({ success: true, iconUrl: finalIconUrl }), { headers: { 'Content-Type': 'application/json' } });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e.message }), { status: 500 });
   }
