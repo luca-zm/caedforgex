@@ -6,9 +6,10 @@ interface NavigationProps {
   currentView: AppView;
   setView: (view: AppView) => void;
   hasActiveGame: boolean;
+  isGameOwner?: boolean;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, hasActiveGame }) => {
+export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, hasActiveGame, isGameOwner }) => {
   const navItems: { id: AppView; icon: string; label: string; requiresGame: boolean; color: string }[] = [
     { id: 'dashboard', icon: 'fa-globe', label: 'Worlds', requiresGame: false, color: 'text-cyan-400' },
     { id: 'create', icon: 'fa-hammer', label: 'Forge', requiresGame: false, color: 'text-fuchsia-400' },
@@ -17,6 +18,8 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, ha
     { id: 'rules', icon: 'fa-cogs', label: 'Settings', requiresGame: true, color: 'text-slate-400' }, // Changed icon to cogs/settings
     { id: 'guide', icon: 'fa-book', label: 'Guide', requiresGame: false, color: 'text-yellow-400' }, // New Guide Item
   ];
+
+  const visibleNavItems = navItems.filter(item => item.id !== 'rules' || isGameOwner);
 
   return (
     // FIXED Dock Container - Always stays at viewport bottom
@@ -27,7 +30,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, ha
 
         {/* Animated Glow behind the active item */}
 
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive = currentView === item.id;
           const isDisabled = item.requiresGame && !hasActiveGame;
 

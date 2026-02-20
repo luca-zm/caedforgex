@@ -115,7 +115,7 @@ export const GuideView: React.FC<GuideViewProps> = ({ game }) => {
                             onClick={() => setActiveTab('WORLD')}
                             className={`flex-1 py-2 rounded-md text-[9px] font-black uppercase tracking-wider transition-all ${activeTab === 'WORLD' ? 'bg-fuchsia-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
                         >
-                            Intel
+                            Current Rules
                         </button>
                     )}
                     <button
@@ -211,86 +211,76 @@ export const GuideView: React.FC<GuideViewProps> = ({ game }) => {
                     </div>
                 )}
 
-                {/* === VIEW 2: WORLD INTEL (SHOWN IF SPECIFIC GAME AND TAB SELECTED) === */}
+                {/* === VIEW 2: WORLD INTEL (CURRENT RULES) === */}
                 {!isGlobal && activeTab === 'WORLD' && game && game.rules && (
-                    <div className="space-y-8 animate-slideUp">
+                    <div className="space-y-8 animate-slideUp text-left">
 
-                        {/* 1. HUD STATS */}
-                        <section>
-                            <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <i className="fas fa-microchip"></i> Core Physics
-                            </h2>
-                            <div className="grid grid-cols-2 gap-3 mb-3">
-                                <StatDisplay
-                                    label="Starting HP"
-                                    value={game.rules.initialHealth}
-                                    icon="fa-heart"
-                                    color="red"
-                                />
-                                <StatDisplay
-                                    label={game.rules.resourceType === 'MANA_RAMP' ? 'Max Mana' : 'Energy/Turn'}
-                                    value={game.rules.maxResource}
-                                    icon="fa-bolt"
-                                    color={game.rules.resourceType === 'MANA_RAMP' ? 'blue' : 'yellow'}
-                                />
-                            </div>
-                            <div className="grid grid-cols-3 gap-3">
-                                <div className="bg-black/40 border border-white/10 rounded-lg p-2 text-center">
-                                    <div className="text-[9px] text-slate-500 uppercase">Hand Size</div>
-                                    <div className="text-white font-bold">{game.rules.startingHandSize}</div>
-                                </div>
-                                <div className="bg-black/40 border border-white/10 rounded-lg p-2 text-center">
-                                    <div className="text-[9px] text-slate-500 uppercase">Draw/Turn</div>
-                                    <div className="text-white font-bold">{game.rules.cardsPerTurn}</div>
-                                </div>
-                                <div className="bg-black/40 border border-white/10 rounded-lg p-2 text-center">
-                                    <div className="text-[9px] text-slate-500 uppercase">Deck Min</div>
-                                    <div className="text-white font-bold">{game.rules.constraints.minCards}</div>
-                                </div>
-                            </div>
-                        </section>
+                        <div className="p-4 rounded-xl bg-gradient-to-r from-red-900/40 to-orange-900/20 border border-red-500/30 mb-6 shadow-inner">
+                            <p className="text-xs text-red-100 leading-relaxed font-medium">
+                                <i className="fas fa-gavel mr-2"></i>
+                                These are the <strong>Official Current Rules</strong> for the {game.name} universe. All battles fought in this realm are governed by these limits.
+                            </p>
+                        </div>
 
-                        {/* 2. STRATEGY CODEX */}
-                        {game.promoCards && game.promoCards.length > 0 && (
-                            <section>
-                                <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                                    <h2 className="text-xs font-bold text-fuchsia-400 uppercase tracking-widest flex items-center gap-2">
-                                        <i className="fas fa-chess-knight"></i> Tactical Codex
-                                    </h2>
-                                    <span className="text-[9px] bg-fuchsia-900/30 text-fuchsia-300 px-2 py-0.5 rounded border border-fuchsia-500/30">Archetypes</span>
-                                </div>
+                        {/* Rendering the dynamic rules based on the game's codex format */}
+                        {game.rules.fullText ? (
+                            <div className="bg-black/80 border border-white/10 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative overflow-hidden">
+                                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay pointer-events-none"></div>
+                                <div className="space-y-4 relative z-10">
+                                    {game.rules.fullText.split('\n').map((line, idx) => {
+                                        const renderBoldParts = (text: string) => {
+                                            if (!text.includes('**')) return text;
+                                            const parts = text.split('**');
+                                            return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="font-bold text-white tracking-wide">{part}</strong> : part);
+                                        };
 
-                                <div className="space-y-3">
-                                    {game.promoCards.map((card, idx) => (
-                                        <div key={idx} className="relative overflow-hidden bg-gradient-to-r from-[#1a1824] to-black border-l-4 border-fuchsia-500 rounded-r-xl p-4 group">
-                                            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-fuchsia-900/20 to-transparent pointer-events-none"></div>
-                                            <div className="flex items-start gap-4 relative z-10">
-                                                <div className="shrink-0 w-12 h-12 rounded-lg bg-black border border-white/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                                                    <i className={`fas ${card.icon} text-2xl text-fuchsia-400`}></i>
+                                        if (line.startsWith('# ')) {
+                                            return <h2 key={idx} className="text-2xl font-black text-white italic uppercase mb-6 tracking-wider border-b border-white/10 pb-2 drop-shadow-md">{line.replace('# ', '')}</h2>;
+                                        }
+                                        if (line.startsWith('## ')) {
+                                            return <h3 key={idx} className="text-lg font-bold text-fuchsia-400 mt-6 mb-3 uppercase tracking-widest flex items-center gap-2 drop-shadow-sm"><div className="w-1.5 h-1.5 bg-fuchsia-500 rounded-full shadow-[0_0_8px_#d946ef]"></div>{line.replace('## ', '')}</h3>;
+                                        }
+                                        if (line.startsWith('### ')) {
+                                            return <h4 key={idx} className="text-sm font-bold text-slate-300 mt-4 mb-2 uppercase tracking-wide border-b border-white/5 pb-1 inline-block">{line.replace('### ', '')}</h4>;
+                                        }
+                                        if (line.startsWith('- **')) {
+                                            const parts = line.replace('- **', '').split('**');
+                                            return (
+                                                <div key={idx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-2 pl-4 border-l-2 border-fuchsia-500/50 bg-white/5 py-1.5 px-3 rounded-r-lg">
+                                                    <span className="text-xs font-bold text-white uppercase tracking-wider">{parts[0]}</span>
+                                                    <span className="text-[11px] text-emerald-400 font-medium">{parts[1]?.replace(':', '')}</span>
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-white font-black uppercase text-sm mb-1 tracking-wide">{card.title}</h3>
-                                                    <p className="text-xs text-slate-400 leading-relaxed font-medium">{card.description}</p>
+                                            );
+                                        }
+                                        if (line.startsWith('1.') || line.startsWith('2.') || line.startsWith('3.') || line.startsWith('4.')) {
+                                            const parts = line.split('**');
+                                            return (
+                                                <div key={idx} className="flex gap-4 mb-3 bg-black/50 p-4 rounded-xl border border-white/10 shadow-inner group hover:border-fuchsia-500/30 transition-colors">
+                                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-600 to-purple-800 flex items-center justify-center text-[12px] font-black text-white shrink-0 shadow-[0_0_15px_rgba(217,70,239,0.3)]">{line.charAt(0)}</div>
+                                                    <div className="flex flex-col flex-1 justify-center">
+                                                        <span className="text-xs font-black text-white uppercase mb-1 tracking-wider">{parts[1]}</span>
+                                                        <span className="text-[11px] text-slate-400 leading-relaxed font-medium">{parts[2]}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                            )
+                                        }
+                                        if (line.startsWith('*')) {
+                                            return <p key={idx} className="text-[11px] text-slate-400 italic mb-6 border-l-2 border-fuchsia-500/30 pl-4 py-1 leading-relaxed">{renderBoldParts(line.replaceAll('*', ''))}</p>;
+                                        }
+                                        if (line.trim() === '') {
+                                            return <div key={idx} className="h-3"></div>;
+                                        }
+                                        return <p key={idx} className="text-xs text-slate-300 mb-2 leading-relaxed font-medium">{renderBoldParts(line)}</p>;
+                                    })}
                                 </div>
-                            </section>
+                            </div>
+                        ) : (
+                            <div className="p-12 flex flex-col items-center justify-center bg-black/40 border border-white/10 rounded-3xl shadow-inner">
+                                <i className="fas fa-scroll text-5xl text-slate-700 mb-4 opacity-50"></i>
+                                <h3 className="text-xl font-black text-slate-500 italic uppercase mb-2">No Codex Laws Established</h3>
+                                <p className="text-xs text-slate-600 text-center max-w-xs">{game.name} relies entirely on base physics without customized parameters.</p>
+                            </div>
                         )}
-
-                        {/* 3. FLAVOR TEXT */}
-                        <section>
-                            <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                <i className="fas fa-quote-left"></i> Mission Statement
-                            </h2>
-                            <div className="p-6 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] bg-black/30 border border-white/10 rounded-xl relative">
-                                <p className="text-sm italic text-slate-300 font-serif leading-relaxed text-center">
-                                    "{game.rules.fullText || "Dominion is earned, not given. Construct your arsenal and claim victory."}"
-                                </p>
-                            </div>
-                        </section>
-
                     </div>
                 )}
 
