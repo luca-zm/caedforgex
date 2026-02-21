@@ -485,7 +485,7 @@ const App: React.FC = () => {
                 currentView={view}
                 setView={handleSetView}
                 hasActiveGame={!!activeGame}
-                isGameOwner={activeGame ? createdGameIds.includes(activeGame.id) : false}
+                isGameOwner={activeGame ? (activeGame.id === 'GLOBAL_CORE' || createdGameIds.includes(activeGame.id)) : false}
             />
 
             {/* Global Card Modal (Has animations!) */}

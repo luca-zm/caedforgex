@@ -37,8 +37,17 @@ interface Env {
 export const onRequestGet: PagesFunction<Env> = async (context) => {
   const url = new URL(context.request.url);
   const gameId = url.searchParams.get('gameId');
+  const userId = url.searchParams.get('userId');
 
   if (!gameId) return new Response("Missing gameId", { status: 400 });
+
+  // For the Global World, filter cards: show only the user's own cards + the 20 default starter cards (createdAt = 0)
+  if (gameId === 'GLOBAL_CORE' && userId) {
+    const { results } = await context.env.DB.prepare(
+      "SELECT * FROM cards WHERE gameId = ? AND (userId = ? OR createdAt = 0) ORDER BY createdAt DESC"
+    ).bind(gameId, userId).all();
+    return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });
+  }
 
   const { results } = await context.env.DB.prepare("SELECT * FROM cards WHERE gameId = ? ORDER BY createdAt DESC").bind(gameId).all();
   return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });

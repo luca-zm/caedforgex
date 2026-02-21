@@ -77,7 +77,14 @@ export const storageService = {
     // ================= CARDS =================
     async getCards(gameId: string): Promise<CardData[]> {
         try {
-            const res = await fetch(`${API_URL}/cards?gameId=${gameId}`);
+            // For the Global World, pass userId so the backend filters to show
+            // only this user's cards + the 20 default starter cards
+            const uid = auth.currentUser?.uid;
+            const params = new URLSearchParams({ gameId });
+            if (gameId === 'GLOBAL_CORE' && uid) {
+                params.set('userId', uid);
+            }
+            const res = await fetch(`${API_URL}/cards?${params.toString()}`);
             const contentType = res.headers.get("content-type");
             if (!res.ok || !contentType || !contentType.includes("application/json")) {
                 throw new Error("Invalid API Response");
