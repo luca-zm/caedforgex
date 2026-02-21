@@ -26,11 +26,11 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, ha
   });
 
   return (
-    // FIXED Dock Container - Always stays at viewport bottom
-    <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-[#0f0b15]/95 to-transparent pointer-events-none z-[60] flex items-end justify-center pb-6">
+    // Dock Container - Part of flex flow, always at bottom
+    <div className="shrink-0 w-full bg-gradient-to-t from-black via-[#0f0b15]/95 to-transparent z-[60] flex items-end justify-center pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
 
       {/* The Dock Itself */}
-      <div className="pointer-events-auto bg-[#1a1824]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-2 py-2 flex gap-1 shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative mx-4 max-w-lg w-full justify-between">
+      <div className="bg-[#1a1824]/90 backdrop-blur-xl border border-white/10 rounded-[2rem] px-2 py-2 flex gap-1 shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative mx-4 max-w-lg w-full justify-between">
 
         {/* Animated Glow behind the active item */}
 

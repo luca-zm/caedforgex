@@ -651,7 +651,7 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                                 <i className="fas fa-times"></i>
                             </button>
                         </div>
-                        <div className="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3 pb-24">
+                        <div className="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3 pb-4">
                             {activeDecks.map(deck => {
                                 const valid = isDeckValid(deck);
                                 return (

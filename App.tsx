@@ -449,7 +449,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen w-screen bg-[#141218] text-[#E6E1E5] overflow-hidden font-sans">
+        <div className="flex flex-col h-full w-full bg-[#141218] text-[#E6E1E5] overflow-hidden font-sans">
 
             {/* Loading Overlay */}
             {loading && (
@@ -484,8 +484,7 @@ const App: React.FC = () => {
             )}
 
             {/* MAIN CONTENT AREA */}
-            {/* Added pb-24 to accommodate fixed footer */}
-            <main className="flex-1 relative overflow-hidden pb-24">
+            <main className="flex-1 relative overflow-hidden min-h-0">
                 {renderView()}
             </main>
 

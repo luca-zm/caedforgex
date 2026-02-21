@@ -220,7 +220,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
                         <i className="fas fa-times"></i>
                     </button>
                 </div>
-                <div className="flex-1 overflow-y-auto px-6 pb-24 no-scrollbar space-y-8">
+                <div className="flex-1 overflow-y-auto px-6 pb-4 no-scrollbar space-y-8">
                     <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 block">Game Features</label>
                         <div className="flex gap-4 overflow-x-auto pb-4 snap-x no-scrollbar">
@@ -476,7 +476,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
                     )}
                 </div>
 
-                <div className="flex-1 overflow-y-auto no-scrollbar pb-24 px-6 pt-2">
+                <div className="flex-1 overflow-y-auto no-scrollbar pb-4 px-6 pt-2">
                     <div className="flex flex-col gap-4">
 
                         {/* GLOBAL CORE SPECIAL DISPLAY */}
