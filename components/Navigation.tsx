@@ -19,7 +19,11 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, setView, ha
     { id: 'guide', icon: 'fa-book', label: 'Guide', requiresGame: false, color: 'text-yellow-400' }, // New Guide Item
   ];
 
-  const visibleNavItems = navItems.filter(item => item.id !== 'rules' || isGameOwner);
+  const visibleNavItems = navItems.filter(item => {
+    if (item.id === 'rules' && !isGameOwner) return false;
+    if (item.id === 'create' && !isGameOwner) return false;
+    return true;
+  });
 
   return (
     // FIXED Dock Container - Always stays at viewport bottom

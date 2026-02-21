@@ -588,11 +588,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
                             </div>
                         ))}
 
-                        <div className="mt-8 mb-4 flex justify-center opacity-30 hover:opacity-100 transition-opacity">
-                            <button onClick={handleSystemInit} className="text-[10px] text-slate-500 font-bold uppercase border-b border-transparent hover:border-slate-500">
-                                <i className="fas fa-database mr-1"></i> Initialize Database (Admin)
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
