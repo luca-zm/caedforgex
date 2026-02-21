@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CardData, Deck, GameProject, CardType, GameRules, BoardInstance } from '../types';
 import { CardComponent } from './CardComponent';
+import { Scoreboard } from './Scoreboard';
 import { storageService } from '../services/storageService';
 import { generateBoardArt } from '../services/geminiService';
 
@@ -20,6 +21,7 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
     const [playerName, setPlayerName] = useState('Player 1');
     const [lobbyBg, setLobbyBg] = useState(game.boardTheme?.backgroundUrl || '');
     const [showDeckSelector, setShowDeckSelector] = useState(false);
+    const [showScoreboard, setShowScoreboard] = useState(false);
 
     // CLASH ROYALE UX STATE
     const arenas = [
@@ -521,10 +523,21 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                 </div>
 
                 {/* TOP BAR / TITLE */}
-                <div className="relative z-30 pt-12 pb-4 px-6 text-center">
-                    <h1 className="text-3xl font-black text-white italic uppercase drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]" style={{ textShadow: '0 2px 10px rgba(0,0,0,1)' }}>
+                <div className="relative z-30 pt-12 pb-4 px-6 flex items-center justify-between">
+                    <div className="w-10"></div>
+                    <h1 className="text-3xl font-black text-white italic uppercase drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] text-center" style={{ textShadow: '0 2px 10px rgba(0,0,0,1)' }}>
                         {game.name}
                     </h1>
+                    {game.id !== 'GLOBAL_CORE' ? (
+                        <button
+                            onClick={() => setShowScoreboard(true)}
+                            className="w-10 h-10 rounded-full bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center text-yellow-400 hover:bg-yellow-500 hover:text-black transition-all shadow-lg"
+                        >
+                            <i className="fas fa-trophy text-sm"></i>
+                        </button>
+                    ) : (
+                        <div className="w-10"></div>
+                    )}
                 </div>
 
                 {/* MAIN CONTENT PORTAL */}
@@ -679,6 +692,11 @@ export const GameTable: React.FC<GameTableProps> = ({ game, cards, decks }) => {
                             )}
                         </div>
                     </div>
+                )}
+
+                {/* SCOREBOARD OVERLAY (for custom worlds only) */}
+                {showScoreboard && game.id !== 'GLOBAL_CORE' && (
+                    <Scoreboard game={game} onClose={() => setShowScoreboard(false)} />
                 )}
             </div>
         )

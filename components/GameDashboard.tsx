@@ -535,9 +535,16 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
 
                                 <div className="absolute inset-0 p-6 flex flex-col justify-between">
                                     <div className="flex justify-between items-start">
-                                        <span className="px-2 py-0.5 rounded bg-black/40 backdrop-blur text-[8px] font-black uppercase tracking-widest text-white border border-white/10 shadow-sm">
-                                            {game.artStyle.replace('_', ' ')}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-2 py-0.5 rounded bg-black/40 backdrop-blur text-[8px] font-black uppercase tracking-widest text-white border border-white/10 shadow-sm">
+                                                {game.artStyle.replace('_', ' ')}
+                                            </span>
+                                            {createdGameIds.includes(game.id) && (
+                                                <span className="px-2 py-0.5 rounded bg-yellow-500/20 backdrop-blur text-[8px] font-black uppercase tracking-widest text-yellow-400 border border-yellow-500/30 shadow-sm flex items-center gap-1">
+                                                    <i className="fas fa-crown text-[8px]"></i> Owner
+                                                </span>
+                                            )}
+                                        </div>
                                         {createdGameIds.includes(game.id) && (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) onDeleteGame(game.id); }}

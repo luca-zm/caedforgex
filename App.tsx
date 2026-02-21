@@ -281,6 +281,16 @@ const App: React.FC = () => {
         // Cloud Save
         await storageService.saveCard(newCard);
 
+        // If forged in a custom world, also clone to Global Vault so it appears in the user's global collection
+        if (newCard.gameId !== 'GLOBAL_CORE') {
+            const globalClone: CardData = {
+                ...newCard,
+                id: `${newCard.id}_global`,
+                gameId: 'GLOBAL_CORE'
+            };
+            await storageService.saveCard(globalClone);
+        }
+
         // If a deck was selected in the creator, add it immediately
         if (deckId) {
             const deck = decks.find(d => d.id === deckId);
