@@ -61,15 +61,17 @@ const ManaCurve = ({ cards }: { cards: CardData[] }) => {
 };
 
 // 2. Tactile Grid Card (Supercell Style)
+// Tap = toggle in deck, Long Press (300ms) = inspect/zoom card
 const AutoScalingCard = ({ card, count, isSelected, onToggle, onInspect }: any) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [scale, setScale] = useState(1);
+    const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const didLongPress = useRef(false);
 
     useEffect(() => {
         if (!containerRef.current) return;
         const observer = new ResizeObserver((entries) => {
             if (entries[0]) {
-                // CardComponent base width is 240px
                 setScale(entries[0].contentRect.width / 240);
             }
         });
@@ -77,29 +79,63 @@ const AutoScalingCard = ({ card, count, isSelected, onToggle, onInspect }: any) 
         return () => observer.disconnect();
     }, []);
 
+    const handlePointerDown = () => {
+        didLongPress.current = false;
+        longPressTimer.current = setTimeout(() => {
+            didLongPress.current = true;
+            onInspect(card);
+        }, 300);
+    };
+
+    const handlePointerUp = () => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
+        // Only toggle if it wasn't a long press
+        if (!didLongPress.current) {
+            onToggle(card.id);
+        }
+    };
+
+    const handlePointerLeave = () => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
+    };
+
     return (
-        <div ref={containerRef} className="w-full relative group aspect-[240/340] cursor-pointer" onClick={() => onToggle(card.id)}>
+        <div
+            ref={containerRef}
+            className="w-full relative group aspect-[240/340] cursor-pointer select-none"
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerLeave}
+            onContextMenu={(e) => e.preventDefault()}
+        >
             <div className={`
-                absolute top-0 left-0 origin-top-left transition-all duration-300 ease-out
+                absolute top-0 left-0 origin-top-left transition-all duration-300 ease-out pointer-events-none
                 ${isSelected ? '-translate-y-2 drop-shadow-[0_10px_15px_rgba(217,70,239,0.3)]' : 'drop-shadow-md group-hover:-translate-y-1'}
                 active:scale-[0.92]
             `} style={{ transform: `scale(${isSelected ? scale * 1.02 : scale})`, width: 240, height: 340 }}>
                 <CardComponent card={card} scale={1} staticMode={true} />
             </div>
 
-            {/* Level/Count Badge (Supercell Style: Bottom right, solid, punchy) */}
+            {/* Level/Count Badge */}
             {count > 0 && (
-                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-cyan-500 rounded-md border-2 border-[#0f0b15] shadow-lg flex items-center justify-center z-20 group-active:scale-90 transition-transform">
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-cyan-500 rounded-md border-2 border-[#0f0b15] shadow-lg flex items-center justify-center z-20 pointer-events-none">
                     <span className="text-white font-black text-sm drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">x{count}</span>
                 </div>
             )}
 
-            {/* Inspect Button */}
+            {/* Inspect Button (larger for mobile) */}
             <button
+                onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => { e.stopPropagation(); onInspect(card); }}
-                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white/70 hover:bg-fuchsia-500 hover:text-white flex items-center justify-center z-20 border border-white/20 backdrop-blur-md shadow-lg transition-colors active:scale-90"
+                className="absolute top-1 right-1 w-9 h-9 rounded-full bg-black/70 text-white/80 hover:bg-fuchsia-500 hover:text-white flex items-center justify-center z-20 border border-white/20 backdrop-blur-md shadow-lg transition-colors active:scale-90"
             >
-                <i className="fas fa-search text-[10px]"></i>
+                <i className="fas fa-search text-xs"></i>
             </button>
         </div>
     );
